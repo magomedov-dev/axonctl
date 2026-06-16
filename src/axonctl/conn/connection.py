@@ -1,13 +1,14 @@
 """Per-device connection.
 
 Owns one device's transport and the machinery above it: the shared pending
-registry, the id generator, the frame router, and an :class:`RpcClient`. Runs two
-background tasks for the connection's lifetime — a read loop (feeds inbound
-frames to the router) and a ping loop (application-level heartbeat) — and cancels
-them cleanly on :meth:`close`.
+registry, the id generator, the frame router, the event bus, the screen-state
+tracker, and an :class:`RpcClient`. Runs two background tasks for the connection's
+lifetime — a read loop (feeds inbound frames to the router) and a ping loop
+(application-level heartbeat) — and cancels them cleanly on :meth:`close`.
 
 Reconnect handling is scaffolded here but only activated in a later stage; for
-now a dropped link transitions to ``CLOSED`` and wakes any in-flight callers.
+now a dropped link transitions to ``CLOSED`` and wakes any in-flight callers and
+waiters.
 """
 
 from __future__ import annotations
@@ -15,10 +16,12 @@ from __future__ import annotations
 import asyncio
 import enum
 import logging
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from typing import Any
 
 from ..config import FleetConfig
+from ..events.bus import EventBus
+from ..events.state import ScreenState
 from ..rpc.client import RpcClient
 from ..rpc.errors import AxonError, ConnectionLost, RpcError
 from ..rpc.ids import IdGenerator
@@ -36,10 +39,6 @@ class ConnectionState(enum.Enum):
     CLOSED = "closed"
 
 
-def _ignore_event(_event: Mapping[str, Any]) -> None:
-    """Default event sink: drop events (real bus arrives in the events stage)."""
-
-
 class DeviceConnection:
     """Manages the socket and RPC plumbing for a single device."""
 
@@ -49,7 +48,6 @@ class DeviceConnection:
         *,
         serial: str,
         config: FleetConfig | None = None,
-        event_sink: Callable[[Mapping[str, Any]], None] | None = None,
     ) -> None:
         """Initialize the connection (does not open the socket).
 
@@ -57,15 +55,15 @@ class DeviceConnection:
             transport: The WebSocket transport (or a fake) to drive.
             serial: Device serial, used for logging and identity.
             config: Fleet config; defaults are used when omitted.
-            event_sink: Callback for server-push events; defaults to dropping
-                them.
         """
         self._transport = transport
         self._serial = serial
         self._config = config or FleetConfig()
         self._pending = PendingRegistry()
         self._ids = IdGenerator(self._pending.__contains__)
-        self._router = FrameRouter(self._pending, on_event=event_sink or _ignore_event)
+        self._events = EventBus()
+        self._screen = ScreenState()
+        self._router = FrameRouter(self._pending, on_event=self._handle_event)
         self.rpc = RpcClient(
             send=self._send,
             pending=self._pending,
@@ -76,6 +74,7 @@ class DeviceConnection:
         self._read_task: asyncio.Task[None] | None = None
         self._ping_task: asyncio.Task[None] | None = None
         self._closing = False
+        self._stream_enabled = False
         self._log = logging.getLogger("axonctl.conn")
 
     @property
@@ -88,6 +87,16 @@ class DeviceConnection:
         """Current lifecycle state."""
         return self._state
 
+    @property
+    def events(self) -> EventBus:
+        """The per-device event bus."""
+        return self._events
+
+    @property
+    def screen(self) -> ScreenState:
+        """The latest observed screen state."""
+        return self._screen
+
     async def connect(self) -> None:
         """Open the socket and start the read and ping loops.
 
@@ -95,6 +104,7 @@ class DeviceConnection:
             ConnectionLost: If the socket cannot be opened.
         """
         self._state = ConnectionState.CONNECTING
+        self._stream_enabled = False
         await self._transport.open()
         self._state = ConnectionState.CONNECTED
         self._read_task = asyncio.create_task(
@@ -104,8 +114,21 @@ class DeviceConnection:
             self._ping_loop(), name=f"axon-ping-{self._serial}"
         )
 
+    async def ensure_event_stream(self) -> None:
+        """Enable the server-push event stream once (idempotent).
+
+        Raises:
+            RpcError: If the agent rejects the request.
+            RpcTimeout: If the agent does not reply within the deadline.
+            ConnectionLost: If the connection drops during the call.
+        """
+        if self._stream_enabled:
+            return
+        await self.rpc.call("setEventStream", {"enabled": True})
+        self._stream_enabled = True
+
     async def close(self) -> None:
-        """Cancel background tasks, fail pending calls, and close the socket.
+        """Cancel background tasks, fail pending calls/waiters, close the socket.
 
         Idempotent and safe to call from outside the loop tasks.
         """
@@ -127,7 +150,13 @@ class DeviceConnection:
         self._read_task = None
         self._ping_task = None
         self._pending.cancel_all(ConnectionLost("connection closed"))
+        self._events.close()
         await self._transport.close()
+
+    def _handle_event(self, event: Mapping[str, Any]) -> None:
+        if event.get("event") == "screenChanged":
+            self._screen.observe(int(event.get("screen", -1)), event.get("package"))
+        self._events.emit(event)
 
     async def _send(self, text: str) -> None:
         await self._transport.send_text(text)
@@ -168,7 +197,7 @@ class DeviceConnection:
             raise
 
     def _on_disconnect(self, exc: BaseException) -> None:
-        """Mark the link dead and wake any in-flight callers.
+        """Mark the link dead and wake any in-flight callers and waiters.
 
         Idempotent. Reconnect is wired in a later stage; for now we just fail
         fast so callers do not hang until their per-call timeout.
@@ -182,3 +211,4 @@ class DeviceConnection:
             else ConnectionLost(str(exc))
         )
         self._pending.cancel_all(reason)
+        self._events.close()

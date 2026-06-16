@@ -51,3 +51,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `Window`/`WindowList` parsing of `getWindows` (topmost first) with
     `active`/`focused`/`by_type`/`ime`/`dialogs` selections.
   - `Device.windows()`, `Device.find()`, and `Device.find_all()`.
+- **Stage 3 — events and event-driven waits** (the core of the architecture):
+  - Per-device `EventBus` (fan-out subscriptions, close sentinel that wakes
+    blocked waiters) and `ScreenState` tracker, wired into the frame router in
+    place of the Stage 1 stub.
+  - Lazy `setEventStream` enablement on the connection.
+  - `WaitEngine`: subscribe → enable stream → baseline dump → re-dump only on a
+    `screenChanged` with a newer screen — never polling — all under one deadline.
+  - `Device.wait_for()`, `wait_gone()`, `wait_activity()`, `wait_toast()`, and
+    the `sleep()` helper; new `WaitTimeout` exception.
+  - Tests against a scripted fake agent (including a no-polling proof via dump
+    counting); verified end-to-end against a real device's event stream.
