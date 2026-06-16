@@ -30,7 +30,8 @@ from ..conn.connection import DeviceConnection
 from ..conn.ws import WebSocketTransport, WsClient
 from ..device import Device
 from .adb import Adb, AdbBridge
-from .groups import DeviceGroup, TagIndex, resolve_targets
+from .executor import FleetExecutor, Results, Scenario
+from .groups import DeviceGroup, TagIndex, Targets, resolve_targets
 from .ports import PortAllocator
 from .watcher import AdbWatcher, Watcher
 
@@ -68,6 +69,11 @@ class FleetController:
         self._registry: dict[str, Device] = {}
         self._ports = PortAllocator(self._config.port_range)
         self._tags = TagIndex()
+        # One global semaphore per controller, shared by all runs (USB-bus cap).
+        self._semaphore = asyncio.Semaphore(self._config.concurrency)
+        self._executor = FleetExecutor(
+            resolve=self._resolve_targets, semaphore=self._semaphore
+        )
         self._watch_task: asyncio.Task[None] | None = None
         self._on_attached: list[Callable[[Device], None]] = []
         self._on_detached: list[Callable[[str], None]] = []
@@ -138,6 +144,34 @@ class FleetController:
         return DeviceGroup(
             name, lambda: resolve_targets(name, self._registry, self._tags)
         )
+
+    def _resolve_targets(self, targets: Targets) -> list[Device]:
+        return resolve_targets(targets, self._registry, self._tags)
+
+    async def run(
+        self,
+        scenario: Scenario[_T],
+        targets: Targets = None,
+        *,
+        concurrency: int | None = None,
+    ) -> Results[_T]:
+        """Run ``scenario`` across the targeted devices and collect outcomes.
+
+        The target set is snapshotted at the start. A device that fails or drops
+        mid-run becomes a failed outcome rather than aborting the run. The global
+        concurrency cap (``config.concurrency``) is shared with every other
+        concurrent run; ``concurrency`` optionally caps this run further.
+
+        Args:
+            scenario: An ``async`` function taking a :class:`~axonctl.Device`.
+            targets: Group/tag name, serial list, tag predicate, or ``None`` for
+                the whole fleet.
+            concurrency: Optional additional per-run concurrency cap.
+
+        Returns:
+            A :class:`~axonctl.Results` mapping each serial to its outcome.
+        """
+        return await self._executor.run(scenario, targets, concurrency=concurrency)
 
     def on_attached(self, callback: Callable[[Device], None]) -> None:
         """Register a callback invoked with each newly attached device."""
