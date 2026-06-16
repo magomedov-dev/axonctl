@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "axonctl"
-version = "0.2.1"
+version = "0.2.2"
 description = "PC-side async controller for the Axon Android device-fleet automation system"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -60,6 +60,11 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "W", "C4", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# inspect.py is mostly an embedded HTML/CSS/JS template; line length there is
+# not meaningful.
+"src/axonctl/inspect.py" = ["E501"]
 
 [tool.black]
 line-length = 88

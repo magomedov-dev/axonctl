@@ -53,6 +53,7 @@ nav:
       - Troubleshooting: troubleshooting.md
   - Concepts: concepts.md
   - Guides:
+      - UI inspector: inspector.md
       - Selectors: selectors.md
       - The UI tree: tree.md
       - Waiting: waiting.md

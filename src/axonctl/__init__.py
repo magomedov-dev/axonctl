@@ -27,6 +27,7 @@ from .device import Device, connect_device
 from .fleet.controller import FleetController
 from .fleet.executor import Outcome, Results, Scenario
 from .fleet.groups import DeviceGroup, Targets
+from .inspect import build_inspector_html
 from .retry import RetryPolicy, retry_on_stale
 from .rpc.errors import (
     AccessibilityDisabled,
@@ -56,7 +57,7 @@ from .tree.selector import Selector
 from .tree.tree import UiTree
 from .tree.window import Window, WindowList
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 __all__ = [
     # Fleet
@@ -69,6 +70,7 @@ __all__ = [
     # Core facade
     "Device",
     "connect_device",
+    "build_inspector_html",
     # Configuration
     "FleetConfig",
     "Timeouts",

@@ -33,7 +33,12 @@ def _docstring_constant_ids(tree: ast.AST) -> set[int]:
 
 def test_protocol_strings_and_identifiers_are_ascii() -> None:
     offenders: list[str] = []
+    # inspect.py is a presentation-only HTML/CSS/JS template (typographic chars
+    # like … “ ” · are intentional); it carries no protocol keys.
+    exempt = {"inspect.py"}
     for path in sorted(_SRC.rglob("*.py")):
+        if path.name in exempt:
+            continue
         tree = ast.parse(path.read_text(encoding="utf-8"))
         docstrings = _docstring_constant_ids(tree)
         for node in ast.walk(tree):
