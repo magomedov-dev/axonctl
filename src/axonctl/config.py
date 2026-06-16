@@ -112,6 +112,7 @@ class FleetConfig:
         agent_port: Port the agent listens on (forwarded over adb).
         port_range: Inclusive ``(start, end)`` local port range for forwards.
         concurrency: Global cap on simultaneous scenario tasks across the fleet.
+        adb_path: Explicit adb binary path; auto-resolved when ``None``.
         timeouts: Network and RPC timeouts.
         backoff: Reconnect backoff parameters.
         retry: Retry policy for ``STALE`` node actions.
@@ -121,6 +122,7 @@ class FleetConfig:
     agent_port: int = DEFAULT_AGENT_PORT
     port_range: tuple[int, int] = (10000, 11000)
     concurrency: int = 8
+    adb_path: str | None = None
     timeouts: Timeouts = field(default_factory=Timeouts)
     backoff: Backoff = field(default_factory=Backoff)
     retry: Retry = field(default_factory=Retry)
@@ -184,6 +186,7 @@ class FleetConfig:
                 int(ports.get("end", 11000)),
             ),
             concurrency=int(raw.get("concurrency", 8)),
+            adb_path=raw.get("adb_path"),
             timeouts=Timeouts(
                 connect=float(timeouts.get("connect", 10.0)),
                 rpc=float(timeouts.get("rpc", 15.0)),

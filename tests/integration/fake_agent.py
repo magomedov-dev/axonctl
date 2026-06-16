@@ -180,10 +180,15 @@ class ScriptedAgent:
         self._screen = 1
         self._package = FAKE_PACKAGE
         self._target = False
+        self._dump_error: str | None = None
 
     def set_target(self, present: bool) -> None:
         """Set whether the target node is in the dump."""
         self._target = present
+
+    def set_dump_error(self, code: str | None) -> None:
+        """Make dumpHierarchy fail with ``code`` (or succeed again if ``None``)."""
+        self._dump_error = code
 
     def set_package(self, package: str) -> None:
         """Set the foreground package reported by dumps."""
@@ -270,7 +275,10 @@ class ScriptedAgent:
                 )
             elif method == "dumpHierarchy":
                 self.dump_count += 1
-                await connection.send(_ok(req_id, self._dump()))
+                if self._dump_error is not None:
+                    await connection.send(_err(req_id, self._dump_error, "transient"))
+                else:
+                    await connection.send(_ok(req_id, self._dump()))
             else:
                 await connection.send(
                     _err(req_id, "METHOD_NOT_FOUND", f"unknown {method}")
@@ -301,6 +309,61 @@ def stale_then_ok_handler(stale_times: int) -> Handler:
                 await connection.send(_ok(req_id, {"success": True}))
 
     return handler
+
+
+class FakeAdb:
+    """Records adb operations; satisfies the ``Adb`` protocol for fleet tests."""
+
+    def __init__(self) -> None:
+        self.forwards: list[tuple[str, int, int]] = []
+        self.removed: list[tuple[str, int]] = []
+        self.launched: list[tuple[str, str]] = []
+        self.stopped: list[tuple[str, str]] = []
+        self.installed: list[tuple[str, str]] = []
+
+    async def forward(self, serial: str, local_port: int, remote_port: int) -> None:
+        self.forwards.append((serial, local_port, remote_port))
+
+    async def remove_forward(self, serial: str, local_port: int) -> None:
+        self.removed.append((serial, local_port))
+
+    async def shell(self, serial: str, command: str) -> str:
+        return ""
+
+    async def launch(self, serial: str, package: str) -> None:
+        self.launched.append((serial, package))
+
+    async def force_stop(self, serial: str, package: str) -> None:
+        self.stopped.append((serial, package))
+
+    async def install(self, serial: str, apk_path: str) -> None:
+        self.installed.append((serial, apk_path))
+
+
+class FakeWatcher:
+    """A scripted ``Watcher``: the test pushes attach/detach events."""
+
+    def __init__(self) -> None:
+        self._queue: asyncio.Queue[tuple[str, bool] | None] = asyncio.Queue()
+
+    def attach(self, serial: str) -> None:
+        self._queue.put_nowait((serial, True))
+
+    def detach(self, serial: str) -> None:
+        self._queue.put_nowait((serial, False))
+
+    def end(self) -> None:
+        self._queue.put_nowait(None)
+
+    async def events(self) -> AsyncIterator[Any]:
+        from axonctl.fleet.watcher import DeviceEvent
+
+        while True:
+            item = await self._queue.get()
+            if item is None:
+                break
+            serial, present = item
+            yield DeviceEvent(serial=serial, present=present)
 
 
 @contextlib.asynccontextmanager

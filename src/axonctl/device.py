@@ -19,6 +19,7 @@ from typing import Any, Literal
 from .config import FleetConfig
 from .conn.connection import ConnectionState, DeviceConnection
 from .conn.ws import WebSocketTransport, WsClient
+from .fleet.adb import Adb
 from .gestures import GestureBuilder
 from .retry import RetryPolicy
 from .tree.node import UiNode
@@ -56,6 +57,7 @@ class Device:
         serial: str,
         tags: Iterable[str],
         connection: DeviceConnection,
+        adb: Adb | None = None,
     ) -> None:
         """Wrap an established connection.
 
@@ -63,10 +65,13 @@ class Device:
             serial: Device serial.
             tags: Static group tags for this device.
             connection: The live device connection.
+            adb: Optional adb bridge enabling ``launch``/``kill``/``install``
+                (bound by the fleet controller; ``None`` for standalone use).
         """
         self._serial = serial
         self._tags = frozenset(tags)
         self._conn = connection
+        self._adb = adb
         self._retry = RetryPolicy(connection.config.retry)
         self._waits = WaitEngine(
             events=connection.events,
@@ -501,6 +506,49 @@ class Device:
         params: dict[str, Any] = {"format": format, "quality": quality}
         _meta, payload = await self._conn.rpc.call_binary("screenshot", params)
         return payload
+
+    # -- adb-side (requires a bound adb bridge) ----------------------------
+
+    async def launch(self, package: str) -> None:
+        """Launch an app by package name (over adb).
+
+        Args:
+            package: The package to launch.
+
+        Raises:
+            RuntimeError: If no adb bridge is bound (standalone device).
+        """
+        await self._require_adb().launch(self._serial, package)
+
+    async def kill(self, package: str) -> None:
+        """Force-stop an app by package name (over adb).
+
+        Args:
+            package: The package to stop.
+
+        Raises:
+            RuntimeError: If no adb bridge is bound (standalone device).
+        """
+        await self._require_adb().force_stop(self._serial, package)
+
+    async def install(self, apk_path: str) -> None:
+        """Install an APK onto the device (over adb).
+
+        Args:
+            apk_path: Path to the APK file.
+
+        Raises:
+            RuntimeError: If no adb bridge is bound (standalone device).
+        """
+        await self._require_adb().install(self._serial, apk_path)
+
+    def _require_adb(self) -> Adb:
+        if self._adb is None:
+            raise RuntimeError(
+                "no adb bridge bound to this device; use a FleetController for "
+                "launch/kill/install"
+            )
+        return self._adb
 
     def _node_params(
         self, selector: Selector, *, window_id: int | None

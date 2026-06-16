@@ -24,6 +24,8 @@ from __future__ import annotations
 from .config import Backoff, FleetConfig, Retry, Timeouts
 from .conn.connection import ConnectionState
 from .device import Device, connect_device
+from .fleet.controller import FleetController
+from .fleet.groups import DeviceGroup, Targets
 from .retry import RetryPolicy, retry_on_stale
 from .rpc.errors import (
     AccessibilityDisabled,
@@ -54,6 +56,10 @@ from .tree.window import Window, WindowList
 __version__ = "0.1.0"
 
 __all__ = [
+    # Fleet
+    "FleetController",
+    "DeviceGroup",
+    "Targets",
     # Core facade
     "Device",
     "connect_device",
