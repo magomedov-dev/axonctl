@@ -104,3 +104,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     or detached device becomes a failed outcome rather than aborting the run.
   - Tests: result collection, failure isolation, target selection, per-run and
     shared-global concurrency caps, detach-mid-run; verified on a real device.
+- **Stage 7 — documentation, examples, release**:
+  - Bilingual MkDocs site (`mkdocs.yml`, `mkdocs-static-i18n`): Overview,
+    Quickstart, Concepts (stateless principle, event-driven waits, the
+    execution model + blocking→async table), Fleet management, Writing
+    scenarios, auto-generated API Reference (mkdocstrings), and the Protocol.
+  - `examples/` — standalone scripts importing the installed library
+    (`single_device`, `inspect_ui`, `run_group`, `fleet.toml`).

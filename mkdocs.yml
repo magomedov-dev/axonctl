@@ -1,0 +1,63 @@
+site_name: axonctl
+site_description: PC-side async controller for the Axon Android device-fleet system
+repo_url: https://github.com/magomedov-dev/axonctl
+docs_dir: docs
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+        - locale: ru
+          name: Русский
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: false
+            members_order: source
+            separate_signature: true
+            show_signature_annotations: true
+
+nav:
+  - Overview: index.md
+  - Quickstart: quickstart.md
+  - Concepts: concepts.md
+  - Fleet management: fleet.md
+  - Writing scenarios: scenarios.md
+  - API Reference: api.md
+  - Protocol: PROTOCOL.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.details
+  - toc:
+      permalink: true
