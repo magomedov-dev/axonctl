@@ -34,6 +34,8 @@ Everything below is importable directly from `axonctl`.
         - RpcTimeout
         - WaitTimeout
         - ConnectionLost
+        - UnsupportedSelector
+        - DeviceNotConnected
         - ParseError
         - InvalidRequest
         - MethodNotFound

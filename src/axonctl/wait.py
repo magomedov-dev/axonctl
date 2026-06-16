@@ -38,6 +38,7 @@ class WaitEngine:
         events: EventBus,
         ensure_stream: Callable[[], Awaitable[None]],
         dump: Callable[..., Awaitable[UiTree]],
+        recent_toast: Callable[[float], str | None],
     ) -> None:
         """Initialize the engine.
 
@@ -45,10 +46,13 @@ class WaitEngine:
             events: The device's event bus.
             ensure_stream: Coroutine that enables the server-push stream (idempotent).
             dump: Coroutine returning a fresh :class:`UiTree`.
+            recent_toast: Returns a toast buffered within the given lookback
+                window (seconds), consuming it; closes the toast race.
         """
         self._events = events
         self._ensure_stream = ensure_stream
         self._dump = dump
+        self._recent_toast = recent_toast
 
     async def wait_until(
         self,
@@ -116,11 +120,17 @@ class WaitEngine:
         except AccessibilityDisabled:
             return None
 
-    async def wait_toast(self, *, timeout: float) -> str:
-        """Wait for the next ``toast`` event and return its text.
+    async def wait_toast(self, *, timeout: float, lookback: float = 1.0) -> str:
+        """Wait for a ``toast`` and return its text.
+
+        First checks a short buffer for a toast that fired just *before* this call
+        (within ``lookback`` seconds) — toasts are ephemeral and may arrive
+        between an action returning and this subscribing. If none is buffered,
+        subscribes and waits.
 
         Args:
             timeout: Deadline in seconds.
+            lookback: How far back (seconds) a just-fired toast still counts.
 
         Returns:
             The toast text.
@@ -129,10 +139,18 @@ class WaitEngine:
             WaitTimeout: If no toast arrives within the deadline.
             ConnectionLost: If the connection drops while waiting.
         """
+        buffered = self._recent_toast(lookback)
+        if buffered is not None:
+            return buffered
         try:
             async with asyncio.timeout(timeout):
                 with self._events.subscribe() as queue:
                     await self._ensure_stream()
+                    # Re-check in case a toast landed between the first check and
+                    # subscribing.
+                    buffered = self._recent_toast(lookback)
+                    if buffered is not None:
+                        return buffered
                     while True:
                         event = await queue.get()
                         if is_closed_event(event):

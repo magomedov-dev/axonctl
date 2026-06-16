@@ -14,15 +14,20 @@ into :class:`Results`, so one failing device never sinks the run.
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections.abc import Awaitable, Callable, Iterator, Mapping
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Generic, TypeVar, cast
+
+from ..rpc.errors import DeviceNotConnected
 
 if TYPE_CHECKING:
     from ..device import Device
     from .groups import Targets
 
 T = TypeVar("T")
+
+_log = logging.getLogger("axonctl.fleet")
 
 #: A user scenario: an async function from a device to some result.
 Scenario = Callable[["Device"], Awaitable[T]]
@@ -110,18 +115,22 @@ class FleetExecutor:
     def __init__(
         self,
         *,
-        resolve: Callable[[Targets], list[Device]],
+        resolve_serials: Callable[[Targets], list[str]],
+        get_device: Callable[[str], Device | None],
         semaphore: asyncio.Semaphore,
     ) -> None:
         """Initialize the executor.
 
         Args:
-            resolve: Resolves a ``targets`` selection to a device list (a
-                snapshot is taken at the start of each run).
+            resolve_serials: Resolves a ``targets`` selection to the full set of
+                target serials (by config for named/predicate/list selections),
+                snapshotted at the start of each run.
+            get_device: Live lookup of a connected device by serial.
             semaphore: The controller's global concurrency semaphore, shared by
                 all runs (USB-bus protection).
         """
-        self._resolve = resolve
+        self._resolve_serials = resolve_serials
+        self._get_device = get_device
         self._semaphore = semaphore
 
     async def run(
@@ -133,27 +142,48 @@ class FleetExecutor:
     ) -> Results[T]:
         """Run ``scenario`` on every targeted device, collecting outcomes.
 
-        The target set is snapshotted at the start (so the run is deterministic
-        even as devices come and go); a device that drops mid-run surfaces as a
-        failed outcome rather than aborting the run.
+        The target serials are snapshotted at the start (so the run is
+        deterministic even as devices come and go). A targeted serial that is not
+        currently connected, or a device that fails/drops mid-run, surfaces as a
+        failed outcome rather than aborting the run or being silently skipped.
 
         Args:
             scenario: An ``async`` function taking a :class:`~axonctl.Device`.
             targets: A group/tag name, serial list, tag predicate, or ``None``
-                for the whole fleet.
+                for all connected devices.
             concurrency: Optional per-run cap; the global semaphore always
                 applies on top of it. Effective parallelism is the smaller of
                 the two.
 
         Returns:
             A :class:`Results` mapping each serial to its :class:`Outcome`.
+            Serials not connected map to a failed outcome carrying
+            :class:`~axonctl.DeviceNotConnected`.
         """
-        devices = self._resolve(targets)
+        serials = self._resolve_serials(targets)
+        if not serials:
+            _log.warning(
+                "run: targets resolved to 0 devices - the fleet may still be "
+                "connecting, or no configured device matches"
+            )
         run_sem = asyncio.Semaphore(concurrency) if concurrency is not None else None
+        results: dict[str, Outcome[T]] = {}
+        connected: list[Device] = []
+        for serial in serials:
+            device = self._get_device(serial)
+            if device is None:
+                results[serial] = Outcome(
+                    serial=serial,
+                    error=DeviceNotConnected(f"{serial} is not connected"),
+                )
+            else:
+                connected.append(device)
         outcomes = await asyncio.gather(
-            *(self._run_one(scenario, device, run_sem) for device in devices)
+            *(self._run_one(scenario, device, run_sem) for device in connected)
         )
-        return Results({outcome.serial: outcome for outcome in outcomes})
+        for outcome in outcomes:
+            results[outcome.serial] = outcome
+        return Results(results)
 
     async def _run_one(
         self,

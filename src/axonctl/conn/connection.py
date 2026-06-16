@@ -84,6 +84,9 @@ class DeviceConnection:
         self._closing = False
         self._stream_enabled = False
         self._attempt = 0
+        # Last toast seen, with the loop time it arrived — lets wait_toast catch a
+        # toast that fired just before the call (toasts are ephemeral, no debounce).
+        self._last_toast: tuple[str, float] | None = None
         self._log = logging.getLogger("axonctl.conn")
 
     @property
@@ -164,9 +167,35 @@ class DeviceConnection:
         await self._transport.close()
 
     def _handle_event(self, event: Mapping[str, Any]) -> None:
-        if event.get("event") == "screenChanged":
+        kind = event.get("event")
+        if kind == "screenChanged":
             self._screen.observe(int(event.get("screen", -1)), event.get("package"))
+        elif kind == "toast":
+            self._last_toast = (
+                str(event.get("text", "")),
+                asyncio.get_running_loop().time(),
+            )
         self._events.emit(event)
+
+    def recent_toast(self, within: float) -> str | None:
+        """Return (and consume) a buffered toast newer than ``within`` seconds.
+
+        Closes the race where a toast fires between an action returning and
+        ``wait_toast`` subscribing.
+
+        Args:
+            within: Maximum age in seconds for a buffered toast to count.
+
+        Returns:
+            The toast text if one arrived within the window, else ``None``.
+        """
+        if self._last_toast is None:
+            return None
+        text, when = self._last_toast
+        if asyncio.get_running_loop().time() - when <= within:
+            self._last_toast = None
+            return text
+        return None
 
     async def _send(self, text: str) -> None:
         await self._transport.send_text(text)
@@ -226,24 +255,36 @@ class DeviceConnection:
         """
         read = asyncio.create_task(self._read_loop(), name=f"axon-read-{self._serial}")
         ping = asyncio.create_task(self._ping_loop(), name=f"axon-ping-{self._serial}")
+        # Enable the event stream concurrently (not before the wait below), so a
+        # drop is detected even if the agent never answers setEventStream.
+        stream = asyncio.create_task(
+            self._enable_stream_best_effort(), name=f"axon-stream-{self._serial}"
+        )
         self._read_task, self._ping_task = read, ping
         try:
-            done, pending = await asyncio.wait(
+            done, _pending = await asyncio.wait(
                 {read, ping}, return_when=asyncio.FIRST_COMPLETED
             )
-            for task in pending:
-                task.cancel()
-            await asyncio.gather(*pending, return_exceptions=True)
             for task in done:
-                exc = task.exception()
-                if exc is not None:
-                    raise exc
+                cause = task.exception()
+                if cause is not None:
+                    raise cause
             raise ConnectionLost("io loop ended unexpectedly")
-        except asyncio.CancelledError:
-            for task in (read, ping):
-                task.cancel()
-            await asyncio.gather(read, ping, return_exceptions=True)
-            raise
+        finally:
+            for task in (read, ping, stream):
+                if not task.done():
+                    task.cancel()
+            await asyncio.gather(read, ping, stream, return_exceptions=True)
+
+    async def _enable_stream_best_effort(self) -> None:
+        try:
+            await self.ensure_event_stream()
+        except (RpcError, RpcTimeout, ConnectionLost) as exc:
+            # The link may be dead; the read loop will detect it. Waits also
+            # retry ensure_event_stream lazily.
+            self._log.warning(
+                "[%s] could not enable event stream: %s", self._serial, exc
+            )
 
     async def _read_loop(self) -> None:
         while True:

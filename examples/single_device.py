@@ -22,7 +22,7 @@ from axonctl import Selector, connect_device
 
 
 async def main(serial: str) -> None:
-    async with await connect_device(serial, uri="ws://127.0.0.1:10001") as device:
+    async with connect_device(serial, uri="ws://127.0.0.1:10001") as device:
         print("ping:", dict(await device.ping()))
         await device.global_action("home")
         node = await device.wait_for(Selector.text_contains("Settings"), timeout=10)

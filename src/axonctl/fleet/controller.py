@@ -51,6 +51,8 @@ class FleetController:
         adb: Adb | None = None,
         watcher: Watcher | None = None,
         transport_factory: TransportFactory | None = None,
+        wait_ready: bool = True,
+        ready_timeout: float = 30.0,
     ) -> None:
         """Create a controller (does not start watching yet).
 
@@ -61,35 +63,56 @@ class FleetController:
                 omitted.
             transport_factory: Builds a transport from ``(serial, port)``;
                 defaults to a local ``WsClient``. Injectable for tests.
+            wait_ready: If ``True`` (default), :meth:`start` waits for the
+                devices present at startup to connect before returning.
+            ready_timeout: Seconds :meth:`start` waits for readiness.
         """
         self._config = config or FleetConfig()
         self._adb: Adb = adb or AdbBridge(self._config.adb_path)
         self._watcher: Watcher = watcher or AdbWatcher(self._config.adb_path)
         self._transport_factory = transport_factory or self._default_transport
+        self._wait_ready = wait_ready
+        self._ready_timeout = ready_timeout
         self._registry: dict[str, Device] = {}
         self._ports = PortAllocator(self._config.port_range)
         self._tags = TagIndex()
         # One global semaphore per controller, shared by all runs (USB-bus cap).
         self._semaphore = asyncio.Semaphore(self._config.concurrency)
-        self._executor = FleetExecutor(
-            resolve=self._resolve_targets, semaphore=self._semaphore
+        self._executor: FleetExecutor = FleetExecutor(
+            resolve_serials=self._resolve_serials,
+            get_device=self.get,
+            semaphore=self._semaphore,
         )
         self._watch_task: asyncio.Task[None] | None = None
+        self._attach_signal = asyncio.Event()
         self._on_attached: list[Callable[[Device], None]] = []
         self._on_detached: list[Callable[[str], None]] = []
         self._log = logging.getLogger("axonctl.fleet")
 
     @classmethod
-    def from_config(cls, path: str | Path) -> FleetController:
+    def from_config(
+        cls,
+        path: str | Path,
+        *,
+        wait_ready: bool = True,
+        ready_timeout: float = 30.0,
+    ) -> FleetController:
         """Build a controller from a TOML config file.
 
         Args:
             path: Path to the fleet TOML config.
+            wait_ready: If ``True`` (default), :meth:`start` waits for present
+                devices to connect.
+            ready_timeout: Seconds :meth:`start` waits for readiness.
 
         Returns:
             A configured (not yet started) controller.
         """
-        return cls(FleetConfig.from_toml(path))
+        return cls(
+            FleetConfig.from_toml(path),
+            wait_ready=wait_ready,
+            ready_timeout=ready_timeout,
+        )
 
     @property
     def config(self) -> FleetConfig:
@@ -102,10 +125,53 @@ class FleetController:
         )
 
     async def start(self) -> None:
-        """Start watching adb for attach/detach (idempotent)."""
+        """Start watching adb for attach/detach (idempotent).
+
+        If ``wait_ready`` is set, also waits for the devices present at startup to
+        finish connecting (up to ``ready_timeout``), so the fleet is usable right
+        after ``async with`` / ``start()``.
+        """
         if self._watch_task is not None:
             return
         self._watch_task = asyncio.create_task(self._watch(), name="axon-fleet-watch")
+        if self._wait_ready:
+            await self.wait_ready(timeout=self._ready_timeout)
+
+    async def wait_ready(self, *, timeout: float = 30.0) -> set[str]:
+        """Wait for the devices currently present on adb to connect.
+
+        Takes the present-device set from adb (the initial ``track-devices``
+        state, not polling) and waits until each has registered, or ``timeout``
+        elapses.
+
+        Args:
+            timeout: Maximum seconds to wait.
+
+        Returns:
+            The set of present serials that did **not** connect in time (empty on
+            full readiness).
+        """
+        present = set(await self._adb.list_serials())
+        if not present:
+            return set()
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + timeout
+        while True:
+            self._attach_signal.clear()
+            missing = present - set(self._registry)
+            if not missing:
+                return set()
+            remaining = deadline - loop.time()
+            if remaining <= 0:
+                self._log.warning(
+                    "wait_ready: %d device(s) not connected in %.1fs: %s",
+                    len(missing),
+                    timeout,
+                    sorted(missing),
+                )
+                return missing
+            with contextlib.suppress(TimeoutError):
+                await asyncio.wait_for(self._attach_signal.wait(), remaining)
 
     async def stop(self) -> None:
         """Stop watching and tear down every device, forward, and port."""
@@ -148,6 +214,30 @@ class FleetController:
     def _resolve_targets(self, targets: Targets) -> list[Device]:
         return resolve_targets(targets, self._registry, self._tags)
 
+    def _resolve_serials(self, targets: Targets) -> list[str]:
+        """Resolve ``targets`` to the full intended serial set for a run.
+
+        Named groups, tag predicates, and explicit lists resolve against the
+        **configured** fleet (so a configured-but-disconnected member is included
+        and surfaces as a failed outcome, not silently skipped). ``None`` means
+        all currently-connected devices.
+        """
+        if targets is None:
+            return list(self._registry)
+        if isinstance(targets, str):
+            return sorted(
+                serial
+                for serial, tags in self._config.devices.items()
+                if targets in tags
+            )
+        if callable(targets):
+            return sorted(
+                serial
+                for serial, tags in self._config.devices.items()
+                if targets(frozenset(tags))
+            )
+        return list(targets)
+
     async def run(
         self,
         scenario: Scenario[_T],
@@ -157,15 +247,22 @@ class FleetController:
     ) -> Results[_T]:
         """Run ``scenario`` across the targeted devices and collect outcomes.
 
-        The target set is snapshotted at the start. A device that fails or drops
-        mid-run becomes a failed outcome rather than aborting the run. The global
-        concurrency cap (``config.concurrency``) is shared with every other
-        concurrent run; ``concurrency`` optionally caps this run further.
+        Target serials are snapshotted at the start. Named groups, tag
+        predicates, and explicit serial lists resolve against the **configured**
+        fleet, so a configured-but-disconnected member surfaces as a failed
+        :class:`~axonctl.Outcome` (carrying :class:`~axonctl.DeviceNotConnected`)
+        rather than being silently skipped; ``targets=None`` runs on all
+        currently-connected devices. A device that fails or drops mid-run also
+        becomes a failed outcome rather than aborting the run.
+
+        The global concurrency cap (``config.concurrency``) is shared with every
+        other concurrent run; ``concurrency`` optionally caps this run further.
 
         Args:
             scenario: An ``async`` function taking a :class:`~axonctl.Device`.
-            targets: Group/tag name, serial list, tag predicate, or ``None`` for
-                the whole fleet.
+            targets: Group/tag name (resolved by config), serial list, tag
+                predicate (over configured tags), or ``None`` for all connected
+                devices.
             concurrency: Optional additional per-run concurrency cap.
 
         Returns:
@@ -210,6 +307,7 @@ class FleetController:
         device = Device(serial=serial, tags=tags, connection=connection, adb=self._adb)
         self._registry[serial] = device
         self._tags.add(serial, tags)
+        self._attach_signal.set()  # wake wait_ready
         self._log.info("[%s] attached (port %d, tags %s)", serial, port, sorted(tags))
         self._fire(self._on_attached, device)
 

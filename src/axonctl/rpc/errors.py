@@ -141,6 +141,25 @@ class ConnectionLost(AxonError):
     """The underlying WebSocket connection dropped or could not be used."""
 
 
+class UnsupportedSelector(AxonError):
+    """A selector cannot be used for the requested operation.
+
+    Raised when a ``.within(...)``-scoped selector is passed to a node action:
+    the agent's ``nodeAction`` matches by bare criteria and cannot express
+    containment, so honouring it silently is impossible. Use ``window_id`` to
+    scope to a window, a more specific selector, or
+    ``tap(node.center)`` after a ``find``.
+    """
+
+
+class DeviceNotConnected(AxonError):
+    """A targeted device is configured/requested but not currently connected.
+
+    Surfaced as a failed :class:`~axonctl.Outcome` for that serial so a run never
+    silently skips a member of the requested target set.
+    """
+
+
 # Wire code -> exception class. Kept beside the classes so adding a code is a
 # one-line change here plus the class above.
 _CODE_MAP: dict[str, type[RpcError]] = {
