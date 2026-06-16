@@ -1,5 +1,7 @@
 # Changelog
 
+**English** · [Русский](CHANGELOG.ru.md)
+
 All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -22,4 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     installed system-wide.
   - Vendored protocol reference `docs/PROTOCOL.md` (synced from the Axon agent
     repository), `CONTRIBUTING.md`, and this changelog.
+  - Bilingual documentation: English is canonical (`FILE.md`), Russian is the
+    mirror (`FILE.ru.md`).
 - Staged implementation plan (`IMPLEMENTATION_PLAN.md`).

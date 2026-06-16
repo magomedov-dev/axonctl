@@ -1,5 +1,7 @@
 # Axon Protocol Reference
 
+**English** · [Русский](PROTOCOL.ru.md)
+
 > **Vendored copy.** Canonical source: the Axon agent repository —
 > <https://github.com/magomedov-dev/axon> (`docs/PROTOCOL.md`). This file is a
 > manually-synced copy kept alongside `axonctl` for offline reference and the
