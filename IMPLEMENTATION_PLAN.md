@@ -335,7 +335,7 @@ reconnect; группы резолвятся через TagIndex.
 |-------|----------|--------|
 | 0 | Scaffolding & tooling | ✅ готов |
 | 1 | Transport + RPC + minimal Device | ✅ готов |
-| 2 | UI tree / Selector / Windows | ⬜ не начат |
+| 2 | UI tree / Selector / Windows | ✅ готов |
 | 3 | Events + waits | ⬜ не начат |
 | 4 | Device facade (gestures/actions/screenshot/retry) | ⬜ не начат |
 | 5 | Fleet (watcher/ports/adb/groups/controller) | ⬜ не начат |
