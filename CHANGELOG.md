@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- GitHub Actions: a `ci` workflow (ruff / black / mypy / pytest on push & PR) and
+  a `docs` workflow that publishes the MkDocs site to `gh-pages` on each push to
+  `main`.
 - Comprehensive bilingual user guide: a full multi-section manual — Installation,
   Troubleshooting, Selectors, The UI tree, Waiting, Actions & gestures,
   Screenshots, Windows & dialogs, Configuration reference, Error handling,
