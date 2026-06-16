@@ -41,6 +41,7 @@ from .rpc.errors import (
     RpcError,
     RpcTimeout,
     Stale,
+    WaitTimeout,
     WindowNotFound,
 )
 from .tree.geom import Bounds, Point
@@ -73,6 +74,7 @@ __all__ = [
     "AxonError",
     "RpcError",
     "RpcTimeout",
+    "WaitTimeout",
     "ConnectionLost",
     # Exceptions — protocol error codes
     "ParseError",

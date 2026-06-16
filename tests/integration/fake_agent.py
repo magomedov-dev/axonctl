@@ -8,6 +8,7 @@ timeouts, errors, dropped connections, and two-part screenshot replies.
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 from collections.abc import AsyncIterator, Awaitable, Callable
 from typing import Any
@@ -159,6 +160,119 @@ def accessibility_disabled_handler() -> Handler:
                 await connection.send(_ok(req_id, {"pong": True, "ts": 1}))
 
     return handler
+
+
+class ScriptedAgent:
+    """A controllable fake agent for event-driven wait tests.
+
+    The test drives state (target presence, foreground package) and pushes
+    ``screenChanged``/``toast`` events to the live connection, while
+    ``dump_count`` records how many dumps the controller performed — letting a
+    test prove a wait is event-driven (re-dumps only on events), not polling.
+    """
+
+    def __init__(self) -> None:
+        self.ready = asyncio.Event()
+        self.dump_count = 0
+        self._conn: ServerConnection | None = None
+        self._screen = 1
+        self._package = FAKE_PACKAGE
+        self._target = False
+
+    def set_target(self, present: bool) -> None:
+        """Set whether the target node is in the dump."""
+        self._target = present
+
+    def set_package(self, package: str) -> None:
+        """Set the foreground package reported by dumps."""
+        self._package = package
+
+    async def emit_screen_changed(self, *, package: str | None = None) -> None:
+        """Bump the screen generation and push a ``screenChanged`` event."""
+        assert self._conn is not None
+        self._screen += 1
+        await self._conn.send(
+            orjson.dumps(
+                {
+                    "event": "screenChanged",
+                    "screen": self._screen,
+                    "package": package or self._package,
+                }
+            ).decode()
+        )
+
+    async def emit_toast(self, text: str) -> None:
+        """Push a ``toast`` event."""
+        assert self._conn is not None
+        await self._conn.send(
+            orjson.dumps(
+                {"event": "toast", "text": text, "package": self._package}
+            ).decode()
+        )
+
+    async def close_connection(self) -> None:
+        """Drop the connection (drives ConnectionLost-during-wait tests)."""
+        assert self._conn is not None
+        await self._conn.close()
+
+    def _dump(self) -> dict[str, Any]:
+        children: list[dict[str, Any]] = []
+        if self._target:
+            children.append(
+                {
+                    "nodeId": 1,
+                    "parentId": 0,
+                    "class": "android.widget.TextView",
+                    "text": "Ready",
+                    "resourceId": "com.app:id/target",
+                    "contentDesc": None,
+                    "clickable": False,
+                    "enabled": True,
+                    "focused": False,
+                    "bounds": {"left": 0, "top": 0, "right": 10, "bottom": 10},
+                    "children": [],
+                }
+            )
+        return {
+            "screen": self._screen,
+            "package": self._package,
+            "nodeId": 0,
+            "parentId": None,
+            "class": "android.widget.FrameLayout",
+            "text": None,
+            "resourceId": None,
+            "contentDesc": None,
+            "clickable": False,
+            "enabled": True,
+            "focused": False,
+            "bounds": {"left": 0, "top": 0, "right": 1080, "bottom": 2280},
+            "children": children,
+        }
+
+    async def handler(self, connection: ServerConnection) -> None:
+        self._conn = connection
+        self.ready.set()
+        async for raw in connection:
+            request: dict[str, Any] = orjson.loads(raw)
+            req_id = request.get("id")
+            method = request.get("method")
+            params = request.get("params") or {}
+            if method == "ping":
+                await connection.send(_ok(req_id, {"pong": True, "ts": 1}))
+            elif method == "setEventStream":
+                await connection.send(
+                    _ok(
+                        req_id,
+                        {"success": True, "enabled": bool(params.get("enabled"))},
+                    )
+                )
+            elif method == "dumpHierarchy":
+                self.dump_count += 1
+                await connection.send(_ok(req_id, self._dump()))
+            else:
+                await connection.send(
+                    _err(req_id, "METHOD_NOT_FOUND", f"unknown {method}")
+                )
 
 
 @contextlib.asynccontextmanager

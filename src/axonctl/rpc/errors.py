@@ -133,6 +133,10 @@ class RpcTimeout(AxonError):
     """An RPC call did not receive a response within its deadline."""
 
 
+class WaitTimeout(AxonError):
+    """An event-driven wait condition was not met within its deadline."""
+
+
 class ConnectionLost(AxonError):
     """The underlying WebSocket connection dropped or could not be used."""
 
