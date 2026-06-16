@@ -40,8 +40,16 @@ class EventBus:
         for queue in self._queues:
             queue.put_nowait(event)
 
+    def interrupt(self) -> None:
+        """Wake current subscribers with the sentinel without closing the bus.
+
+        Used on a transient disconnect: in-flight waits fail, but the bus stays
+        usable so waits started after a reconnect work normally.
+        """
+        self.emit(_CLOSED)
+
     def close(self) -> None:
-        """Wake all subscribers with the close sentinel (idempotent)."""
+        """Wake all subscribers with the close sentinel and close permanently."""
         if self._closed:
             return
         self._closed = True

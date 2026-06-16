@@ -78,3 +78,22 @@
     узлами автоматически повторяются при `STALE`.
   - Тесты: сборка жестов, политика ретраев, скриншот, действия, ретрай STALE;
     проверено на реальном устройстве.
+- **Этап 5 — управление парком и реконнект**:
+  - `FleetController` (async-контекст, `from_config`): следит за adb на
+    attach/detach, выделяет порт, поднимает forward, подключается и
+    регистрирует `Device`; на detach закрывает (останавливая реконнект),
+    снимает forward и освобождает порт.
+    `devices()`/`get()`/`group()`/`on_attached`/`on_detached`.
+  - `AdbWatcher` (поверх `adbutils.track_devices()`), `AdbBridge`
+    (forward/shell/launch/force_stop/install в потоках), `PortAllocator`,
+    `TagIndex` + `DeviceGroup` + резолв targets (имя / список серийников /
+    предикат / все).
+  - Авто-реконнект в `DeviceConnection`: супервизор переоткрывает сокет с
+    backoff после обрыва (не трогая adb), роняя текущие вызовы/ожидания, но
+    сохраняя шину рабочей; явный close корректно его останавливает.
+  - `Device.launch()`/`kill()`/`install()` (через привязанный adb); путь к adb
+    резолвится как `$AXONCTL_ADB` → `.tooling/platform-tools/adb` → `PATH`.
+  - Ожидания теперь терпят транзиентный `ACCESSIBILITY_DISABLED` в дампе
+    (например, в момент запуска приложения), а не падают.
+  - Тесты: порты, tag-индекс/резолв, attach/detach/группы парка, реконнект;
+    проверено end-to-end на реальном устройстве.

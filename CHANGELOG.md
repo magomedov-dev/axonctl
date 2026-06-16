@@ -74,3 +74,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     actions automatically retry on `STALE`.
   - Tests: gesture assembly, retry policy, screenshot, actions, STALE retry;
     verified against a real device.
+- **Stage 5 — fleet management and reconnect**:
+  - `FleetController` (async context manager, `from_config`): watches adb for
+    attach/detach, allocates a port, sets up the forward, connects, and registers
+    a `Device`; on detach it closes (stopping reconnect), removes the forward,
+    and frees the port. `devices()`/`get()`/`group()`/`on_attached`/`on_detached`.
+  - `AdbWatcher` (over `adbutils.track_devices()`), `AdbBridge` (forward/shell/
+    launch/force_stop/install, off-loaded to threads), `PortAllocator`,
+    `TagIndex` + `DeviceGroup` + target resolution (name / serial list /
+    predicate / all).
+  - Auto-reconnect in `DeviceConnection`: a supervisor reopens the socket with
+    backoff after a drop (without touching adb), failing in-flight calls/waiters
+    while keeping the bus usable; an explicit close stops it cleanly.
+  - `Device.launch()`/`kill()`/`install()` (over the bound adb bridge); adb path
+    resolved as `$AXONCTL_ADB` → `.tooling/platform-tools/adb` → `PATH`.
+  - Waits now tolerate a transient `ACCESSIBILITY_DISABLED` dump (e.g. mid app
+    launch) instead of failing.
+  - Tests: ports, tag index/resolution, fleet attach/detach/group, reconnect;
+    verified end-to-end against a real device.

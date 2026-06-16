@@ -71,6 +71,10 @@ strict = true
 packages = ["axonctl"]
 mypy_path = "src"
 
+[[tool.mypy.overrides]]
+module = ["adbutils", "adbutils.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]

@@ -18,7 +18,7 @@ from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, TypeVar
 
 from .events.bus import EventBus, is_closed_event
-from .rpc.errors import ConnectionLost, WaitTimeout
+from .rpc.errors import AccessibilityDisabled, ConnectionLost, WaitTimeout
 
 if TYPE_CHECKING:
     from .tree.tree import UiTree
@@ -79,11 +79,13 @@ class WaitEngine:
             async with asyncio.timeout(timeout):
                 with self._events.subscribe() as queue:
                     await self._ensure_stream()
-                    tree = await self._dump()
-                    result = predicate(tree)
-                    if result is not None:
-                        return result
-                    last_screen = tree.screen
+                    last_screen = -1
+                    tree = await self._safe_dump()
+                    if tree is not None:
+                        result = predicate(tree)
+                        if result is not None:
+                            return result
+                        last_screen = tree.screen
                     while True:
                         event = await queue.get()
                         if is_closed_event(event):
@@ -92,13 +94,27 @@ class WaitEngine:
                             continue
                         if int(event.get("screen", -1)) <= last_screen:
                             continue
-                        tree = await self._dump()
+                        tree = await self._safe_dump()
+                        if tree is None:
+                            continue
                         last_screen = tree.screen
                         result = predicate(tree)
                         if result is not None:
                             return result
         except TimeoutError as exc:
             raise WaitTimeout(f"{what} not satisfied within {timeout}s") from exc
+
+    async def _safe_dump(self) -> UiTree | None:
+        """Dump, treating a transient no-active-window state as 'keep waiting'.
+
+        Returns:
+            The tree, or ``None`` if the screen had no active-window root (e.g.
+            mid-transition during an app launch).
+        """
+        try:
+            return await self._dump()
+        except AccessibilityDisabled:
+            return None
 
     async def wait_toast(self, *, timeout: float) -> str:
         """Wait for the next ``toast`` event and return its text.

@@ -45,6 +45,23 @@ async def test_wait_for_is_event_driven_not_polling() -> None:
         assert agent.dump_count == 1
 
 
+async def test_wait_tolerates_transient_accessibility_disabled() -> None:
+    agent = ScriptedAgent()
+    agent.set_dump_error("ACCESSIBILITY_DISABLED")  # no active window yet
+    async with (
+        fake_agent(agent.handler) as uri,
+        await connect_device("d", uri=uri) as device,
+    ):
+        await agent.ready.wait()
+        task = asyncio.create_task(device.wait_for(_TARGET, timeout=2.0))
+        await asyncio.sleep(0.05)  # baseline dump fails; the wait must keep going
+        agent.set_dump_error(None)
+        agent.set_target(True)
+        await agent.emit_screen_changed()
+        node = await task
+        assert node is not None
+
+
 async def test_wait_gone_resolves_on_event() -> None:
     agent = ScriptedAgent()
     agent.set_target(True)
