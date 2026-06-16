@@ -1,6 +1,5 @@
 # Quickstart
 
-**English** · [Русский](quickstart.ru.md)
 
 ## Install
 

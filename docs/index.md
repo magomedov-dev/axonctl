@@ -1,6 +1,5 @@
 # axonctl
 
-**English** · [Русский](index.ru.md)
 
 `axonctl` is the **PC-side controller** for [Axon](https://github.com/magomedov-dev/axon),
 an Android device-fleet automation system. Each device runs an Accessibility-service
@@ -49,10 +48,29 @@ asyncio.run(main())
 
 ## Where to go next
 
-- [Quickstart](quickstart.md) — install and run your first scenario.
-- [Concepts](concepts.md) — the principles the API is built on.
-- [Fleet management](fleet.md) — config, groups, the controller lifecycle.
-- [Writing scenarios](scenarios.md) — the execution model and the rules.
+**Getting started**
+
+- [Installation](installation.md) — requirements, adb, device prep.
+- [Quickstart](quickstart.md) — run your first scenario.
+- [Troubleshooting](troubleshooting.md) — common issues and fixes.
+
+**Concepts**
+
+- [Concepts](concepts.md) — the principles the API is built on (stateless device,
+  event-driven waits, the single-loop execution model).
+
+**Guides**
+
+- [Selectors](selectors.md) · [The UI tree](tree.md) · [Waiting](waiting.md)
+- [Actions & gestures](actions.md) · [Screenshots](screenshots.md) ·
+  [Windows & dialogs](windows.md)
+- [Fleet management](fleet.md) · [Writing scenarios](scenarios.md) ·
+  [Configuration](configuration.md) · [Error handling](errors.md)
+- [Cookbook](cookbook.md) — copy-pasteable patterns.
+
+**Reference**
+
+- [Architecture](architecture.md) — the internal layers (for contributors).
 - [API Reference](api.md) — the full public API.
 - [Protocol](PROTOCOL.md) — the device wire protocol.
 

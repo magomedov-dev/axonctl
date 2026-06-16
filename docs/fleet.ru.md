@@ -1,6 +1,5 @@
 # Управление парком
 
-[English](fleet.md) · **Русский**
 
 [`FleetController`][axonctl.FleetController] — точка входа. Он следит за adb на
 attach/detach, поднимает форварды, подключает устройства, ведёт реестр и

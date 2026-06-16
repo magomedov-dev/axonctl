@@ -366,8 +366,10 @@ class Device:
         """Long-click the node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
-            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, ``ActionNotSupported``, ``Stale``, or
+                ``WindowNotFound`` (see :meth:`click`).
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("longClick", selector, window_id=window_id)
@@ -378,8 +380,9 @@ class Device:
         """Set the text of the editable node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch, WindowNotFound:
-                See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, or ``WindowNotFound`` (see :meth:`click`).
             NotEditable: If the node is not editable.
             Stale: If the node keeps going stale across retries.
             ConnectionLost: If the connection drops during the call.
@@ -392,8 +395,9 @@ class Device:
         """Clear the text of the editable node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch, WindowNotFound:
-                See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, or ``WindowNotFound`` (see :meth:`click`).
             NotEditable: If the node is not editable.
             Stale: If the node keeps going stale across retries.
             ConnectionLost: If the connection drops during the call.
@@ -415,8 +419,10 @@ class Device:
             window_id: Search a specific window; ``None`` uses the active window.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
-            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, ``ActionNotSupported``, ``Stale``, or
+                ``WindowNotFound`` (see :meth:`click`).
             ConnectionLost: If the connection drops during the call.
         """
         action = "scrollForward" if direction == "forward" else "scrollBackward"
@@ -426,8 +432,10 @@ class Device:
         """Give input focus to the node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
-            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, ``ActionNotSupported``, ``Stale``, or
+                ``WindowNotFound`` (see :meth:`click`).
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("focus", selector, window_id=window_id)
@@ -438,8 +446,10 @@ class Device:
         """Clear input focus from the node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
-            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, ``ActionNotSupported``, ``Stale``, or
+                ``WindowNotFound`` (see :meth:`click`).
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("clearFocus", selector, window_id=window_id)
@@ -448,8 +458,10 @@ class Device:
         """Select the node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
-            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, ``ActionNotSupported``, ``Stale``, or
+                ``WindowNotFound`` (see :meth:`click`).
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("select", selector, window_id=window_id)
@@ -465,8 +477,10 @@ class Device:
         """Set the text selection range on the node matching ``selector``.
 
         Raises:
-            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
-            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector: If ``selector`` is scoped with ``.within(...)``.
+            RpcError: A matching protocol error - ``NodeNotFound``,
+                ``AmbiguousMatch``, ``ActionNotSupported``, ``Stale``, or
+                ``WindowNotFound`` (see :meth:`click`).
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action(
