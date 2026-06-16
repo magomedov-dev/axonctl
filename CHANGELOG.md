@@ -92,3 +92,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     launch) instead of failing.
   - Tests: ports, tag index/resolution, fleet attach/detach/group, reconnect;
     verified end-to-end against a real device.
+- **Stage 6 — scenario executor**:
+  - `FleetController.run(scenario, targets=None, concurrency=None)` (and the
+    underlying `FleetExecutor`): snapshots the target set, runs the scenario as
+    one task per device, and collects per-device outcomes.
+  - One global concurrency semaphore per controller (from `config.concurrency`),
+    shared across all concurrent runs (USB-bus protection); an optional per-run
+    `concurrency` adds a second cap.
+  - `Scenario` type alias, `Outcome` (value/error + `ok`/`unwrap`), and `Results`
+    (a `serial -> Outcome` mapping with `all_ok`/`succeeded`/`failed`). A failing
+    or detached device becomes a failed outcome rather than aborting the run.
+  - Tests: result collection, failure isolation, target selection, per-run and
+    shared-global concurrency caps, detach-mid-run; verified on a real device.
