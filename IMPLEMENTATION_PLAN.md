@@ -334,7 +334,7 @@ reconnect; группы резолвятся через TagIndex.
 | Stage | Описание | Статус |
 |-------|----------|--------|
 | 0 | Scaffolding & tooling | ✅ готов |
-| 1 | Transport + RPC + minimal Device | ⬜ не начат |
+| 1 | Transport + RPC + minimal Device | ✅ готов |
 | 2 | UI tree / Selector / Windows | ⬜ не начат |
 | 3 | Events + waits | ⬜ не начат |
 | 4 | Device facade (gestures/actions/screenshot/retry) | ⬜ не начат |
