@@ -9,6 +9,7 @@ They are **not** part of the package.
 |--------|---------------|
 | `single_device.py` | Connect to one device, wait for an element, read it. |
 | `inspect_ui.py` | Dump the UI and print a compact tree (find selectors). |
+| `inspect_screen.py` | Write an interactive HTML inspector (screenshot + clickable elements). |
 | `run_group.py` | `FleetController` + `run` across a group, with `Results`. |
 | `fleet.toml` | Sample fleet configuration. |
 

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Generator, Iterable, Mapping
+from pathlib import Path
 from typing import Any, Literal
 
 from .config import FleetConfig
@@ -21,6 +22,7 @@ from .conn.connection import ConnectionState, DeviceConnection
 from .conn.ws import WebSocketTransport, WsClient
 from .fleet.adb import Adb
 from .gestures import GestureBuilder
+from .inspect import build_inspector_html
 from .retry import RetryPolicy
 from .rpc.errors import UnsupportedSelector
 from .tree.node import UiNode
@@ -532,6 +534,55 @@ class Device:
         params: dict[str, Any] = {"format": format, "quality": quality}
         _meta, payload = await self._conn.rpc.call_binary("screenshot", params)
         return payload
+
+    async def inspect(
+        self,
+        path: str | Path,
+        *,
+        format: ScreenshotFormat = "png",
+        quality: int = 90,
+    ) -> Path:
+        """Capture a dump + screenshot and write an interactive HTML inspector.
+
+        Produces a single self-contained file (no server, no external assets):
+        the screenshot with clickable element overlays, a navigable tree, the
+        selected element's attributes, and ready-to-copy ``Selector`` snippets —
+        an Appium-Inspector-style view of the device's current screen.
+
+        The dump and screenshot are of the **active window** / full screen; node
+        bounds are screen-absolute, so the overlay aligns with the screenshot.
+
+        Args:
+            path: Where to write the ``.html`` file.
+            format: Screenshot encoding (``"png"`` is crisp; ``"jpeg"`` is
+                smaller).
+            quality: JPEG quality 0..100 (ignored for PNG).
+
+        Returns:
+            The path written.
+
+        Raises:
+            AccessibilityDisabled: If there is no active-window root to dump.
+            InternalError: If the screenshot fails (e.g. rate limit).
+            RpcTimeout: If the agent does not reply within the deadline.
+            ConnectionLost: If the connection drops during capture.
+        """
+        tree = await self.dump(compress=False)
+        meta, payload = await self._conn.rpc.call_binary(
+            "screenshot", {"format": format, "quality": quality}
+        )
+        width, height = int(meta.get("width", 0)), int(meta.get("height", 0))
+        mime = "image/png" if format == "png" else "image/jpeg"
+        html = build_inspector_html(
+            tree,
+            payload,
+            image_mime=mime,
+            image_size=(width, height),
+            title=f"axonctl - {self._serial}",
+        )
+        target = Path(path)
+        target.write_text(html, encoding="utf-8")
+        return target
 
     # -- adb-side (requires a bound adb bridge) ----------------------------
 
