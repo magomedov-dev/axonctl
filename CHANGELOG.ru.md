@@ -43,3 +43,13 @@
     `connect_device`; первый публичный `__all__`.
   - Unit- и интеграционные тесты (против in-process фейкового агента);
     проверено end-to-end на реальном устройстве.
+- **Этап 2 — дерево UI, селекторы и окна** (чистый слой, без I/O):
+  - `Selector` с режимами `exact`/`contains`/`regex`, позиционным `index`,
+    областью `.within(...)` и фабриками (`id`, `text`, `text_contains`,
+    `desc`, `cls`); весь матчинг — на ПК поверх дампа.
+  - Навигация `UiNode`: `descendants`/`walk`/`find`/`find_all` плюс лениво
+    связываемые `parent`/`ancestors` (дамп, который только сериализуют, не
+    платит за связывание).
+  - Разбор `getWindows` в `Window`/`WindowList` (топовое первым) с выборками
+    `active`/`focused`/`by_type`/`ime`/`dialogs`.
+  - `Device.windows()`, `Device.find()` и `Device.find_all()`.

@@ -45,7 +45,9 @@ from .rpc.errors import (
 )
 from .tree.geom import Bounds, Point
 from .tree.node import UiNode
+from .tree.selector import Selector
 from .tree.tree import UiTree
+from .tree.window import Window, WindowList
 
 __version__ = "0.1.0"
 
@@ -59,9 +61,12 @@ __all__ = [
     "Backoff",
     # Connection
     "ConnectionState",
-    # UI tree (parsed; navigation/selectors land in the next stage)
+    # UI tree, selectors, and windows
     "UiTree",
     "UiNode",
+    "Selector",
+    "Window",
+    "WindowList",
     "Bounds",
     "Point",
     # Exceptions — base + transport
