@@ -1,6 +1,11 @@
 # --- Reference repos (kept locally, not part of the controller) ---
 /axon/
 
+# --- Project-local tooling (downloaded by scripts/, never committed) ---
+# Holds the dev virtualenv and external binaries (adb / platform-tools) so the
+# host machine stays clean. Provisioned via scripts/bootstrap.sh.
+/.tooling/
+
 # --- Python ---
 __pycache__/
 *.py[cod]

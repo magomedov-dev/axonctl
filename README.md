@@ -1,10 +1,12 @@
 # axonctl
 
+**English** · [Русский](README.ru.md)
+
 > **Status: early development (0.1.0).** Public API is taking shape — see
 > [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md).
 
-`axonctl` is the **PC-side controller** for [Axon](axon/) — an Android device-fleet
-automation system. On each device an Accessibility-service agent (APK) exposes a
+`axonctl` is the **PC-side controller** for [Axon](https://github.com/magomedov-dev/axon)
+— an Android device-fleet automation system. On each device an Accessibility-service agent (APK) exposes a
 stateless JSON-RPC API over a WebSocket; `axonctl` connects to every device over
 `adb forward`, manages the whole fleet, and gives your automation code an
 ergonomic `async` API.
@@ -46,8 +48,8 @@ Requires Python 3.11+.
 
 ## Documentation
 
-- Protocol reference: [`docs/PROTOCOL.md`](docs/PROTOCOL.md) (source of truth:
-  `axon/docs/PROTOCOL.md`).
+- Protocol reference: [`docs/PROTOCOL.md`](docs/PROTOCOL.md) (canonical source:
+  the [Axon agent repo](https://github.com/magomedov-dev/axon), `docs/PROTOCOL.md`).
 - Full docs site: built with MkDocs (planned).
 
 ## Disclaimer
