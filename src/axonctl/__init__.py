@@ -21,9 +21,10 @@ Note:
 
 from __future__ import annotations
 
-from .config import Backoff, FleetConfig, Timeouts
+from .config import Backoff, FleetConfig, Retry, Timeouts
 from .conn.connection import ConnectionState
 from .device import Device, connect_device
+from .retry import RetryPolicy, retry_on_stale
 from .rpc.errors import (
     AccessibilityDisabled,
     ActionNotSupported,
@@ -60,6 +61,10 @@ __all__ = [
     "FleetConfig",
     "Timeouts",
     "Backoff",
+    "Retry",
+    # Retry helpers
+    "RetryPolicy",
+    "retry_on_stale",
     # Connection
     "ConnectionState",
     # UI tree, selectors, and windows

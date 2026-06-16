@@ -86,6 +86,25 @@ class Backoff:
 
 
 @dataclass(frozen=True, slots=True)
+class Retry:
+    """Retry policy for node actions that fail with ``STALE``.
+
+    Attributes:
+        attempts: Total attempts including the first (>= 1).
+        delay: Delay in seconds between attempts.
+    """
+
+    attempts: int = 3
+    delay: float = 0.1
+
+    def __post_init__(self) -> None:
+        if self.attempts < 1:
+            raise ValueError("retry attempts must be >= 1")
+        if self.delay < 0:
+            raise ValueError("retry delay must be non-negative")
+
+
+@dataclass(frozen=True, slots=True)
 class FleetConfig:
     """Top-level configuration for a :class:`~axonctl.FleetController`.
 
@@ -95,6 +114,7 @@ class FleetConfig:
         concurrency: Global cap on simultaneous scenario tasks across the fleet.
         timeouts: Network and RPC timeouts.
         backoff: Reconnect backoff parameters.
+        retry: Retry policy for ``STALE`` node actions.
         devices: Static ``serial -> tags`` map describing the fleet.
     """
 
@@ -103,6 +123,7 @@ class FleetConfig:
     concurrency: int = 8
     timeouts: Timeouts = field(default_factory=Timeouts)
     backoff: Backoff = field(default_factory=Backoff)
+    retry: Retry = field(default_factory=Retry)
     devices: Mapping[str, frozenset[str]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -154,6 +175,7 @@ class FleetConfig:
         ports = raw.get("ports", {})
         timeouts = raw.get("timeouts", {})
         backoff = raw.get("backoff", {})
+        retry = raw.get("retry", {})
         devices_raw: Mapping[str, Iterable[str]] = raw.get("devices", {})
         return cls(
             agent_port=int(raw.get("agent_port", DEFAULT_AGENT_PORT)),
@@ -173,6 +195,10 @@ class FleetConfig:
                 factor=float(backoff.get("factor", 2.0)),
                 max=float(backoff.get("max", 30.0)),
                 jitter=float(backoff.get("jitter", 0.1)),
+            ),
+            retry=Retry(
+                attempts=int(retry.get("attempts", 3)),
+                delay=float(retry.get("delay", 0.1)),
             ),
             devices={serial: frozenset(tags) for serial, tags in devices_raw.items()},
         )

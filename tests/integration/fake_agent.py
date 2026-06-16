@@ -104,6 +104,8 @@ async def default_handler(connection: ServerConnection) -> None:
             await connection.send(
                 _ok(req_id, _windows_result(bool(params.get("includeTree"))))
             )
+        elif method in ("gesture", "nodeAction") or method == "globalAction":
+            await connection.send(_ok(req_id, {"success": True}))
         elif method == "setEventStream":
             await connection.send(
                 _ok(
@@ -273,6 +275,32 @@ class ScriptedAgent:
                 await connection.send(
                     _err(req_id, "METHOD_NOT_FOUND", f"unknown {method}")
                 )
+
+
+def stale_then_ok_handler(stale_times: int) -> Handler:
+    """Return a handler whose ``nodeAction`` fails ``STALE`` ``stale_times`` times.
+
+    After that many STALE responses it succeeds — exercising retry behaviour.
+    """
+    state = {"count": 0}
+
+    async def handler(connection: ServerConnection) -> None:
+        async for raw in connection:
+            request: dict[str, Any] = orjson.loads(raw)
+            req_id = request.get("id")
+            method = request.get("method")
+            if method == "nodeAction":
+                if state["count"] < stale_times:
+                    state["count"] += 1
+                    await connection.send(_err(req_id, "STALE", "node changed"))
+                else:
+                    await connection.send(_ok(req_id, {"success": True}))
+            elif method == "ping":
+                await connection.send(_ok(req_id, {"pong": True, "ts": 1}))
+            else:
+                await connection.send(_ok(req_id, {"success": True}))
+
+    return handler
 
 
 @contextlib.asynccontextmanager

@@ -62,3 +62,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     the `sleep()` helper; new `WaitTimeout` exception.
   - Tests against a scripted fake agent (including a no-polling proof via dump
     counting); verified end-to-end against a real device's event stream.
+- **Stage 4 — full Device facade: gestures, actions, screenshot, retry**:
+  - `GestureBuilder` (pure stroke assembly) and `Device.tap`/`long_tap`/
+    `double_tap`/`swipe`/`drag`/`pinch`.
+  - Node actions via `nodeAction`: `click`, `long_click`, `set_text`, `clear`,
+    `scroll`, `focus`, `clear_focus`, `select`, `set_selection` (with
+    `window_id`); `global_action`.
+  - `Device.screenshot()` returning image bytes (variant-A metadata+binary
+    correlation; ~1/sec rate limit surfaced as `InternalError`).
+  - `RetryPolicy` + `retry_on_stale` decorator and a `Retry` config; node
+    actions automatically retry on `STALE`.
+  - Tests: gesture assembly, retry policy, screenshot, actions, STALE retry;
+    verified against a real device.
