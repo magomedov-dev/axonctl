@@ -57,7 +57,7 @@ from .tree.selector import Selector
 from .tree.tree import UiTree
 from .tree.window import Window, WindowList
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 __all__ = [
     # Fleet
