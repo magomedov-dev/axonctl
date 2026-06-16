@@ -41,3 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `connect_device` helper; first public `__all__`.
   - Unit + integration tests (against an in-process fake agent); verified
     end-to-end against a real device.
+- **Stage 2 — UI tree, selectors, and windows** (pure layer, no I/O):
+  - `Selector` with `exact`/`contains`/`regex` matching, positional `index`,
+    `.within(...)` scoping, and factories (`id`, `text`, `text_contains`,
+    `desc`, `cls`); all matching runs on the PC over a dump.
+  - `UiNode` navigation: `descendants`/`walk`/`find`/`find_all` plus lazily
+    linked `parent`/`ancestors` (a dump you only serialize never pays for
+    linking).
+  - `Window`/`WindowList` parsing of `getWindows` (topmost first) with
+    `active`/`focused`/`by_type`/`ime`/`dialogs` selections.
+  - `Device.windows()`, `Device.find()`, and `Device.find_all()`.

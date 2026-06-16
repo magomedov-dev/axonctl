@@ -62,8 +62,34 @@ def _dump_result() -> dict[str, Any]:
     }
 
 
+def _windows_result(include_tree: bool) -> dict[str, Any]:
+    app: dict[str, Any] = {
+        "windowId": 12,
+        "type": "application",
+        "layer": 1,
+        "active": True,
+        "focused": True,
+        "title": "Axon",
+        "package": FAKE_PACKAGE,
+        "bounds": {"left": 0, "top": 0, "right": 1080, "bottom": 2280},
+    }
+    system: dict[str, Any] = {
+        "windowId": 4,
+        "type": "system",
+        "layer": 0,
+        "active": False,
+        "focused": False,
+        "title": None,
+        "package": None,
+        "bounds": {"left": 0, "top": 0, "right": 1080, "bottom": 80},
+    }
+    if include_tree:
+        app["root"] = _dump_result()
+    return {"screen": 1, "windows": [app, system]}
+
+
 async def default_handler(connection: ServerConnection) -> None:
-    """Answer ping/dump/setEventStream/screenshot; error on anything else."""
+    """Answer ping/dump/getWindows/setEventStream/screenshot; error otherwise."""
     async for raw in connection:
         request: dict[str, Any] = orjson.loads(raw)
         req_id = request.get("id")
@@ -73,6 +99,10 @@ async def default_handler(connection: ServerConnection) -> None:
             await connection.send(_ok(req_id, {"pong": True, "ts": 1781552384385}))
         elif method == "dumpHierarchy":
             await connection.send(_ok(req_id, _dump_result()))
+        elif method == "getWindows":
+            await connection.send(
+                _ok(req_id, _windows_result(bool(params.get("includeTree"))))
+            )
         elif method == "setEventStream":
             await connection.send(
                 _ok(

@@ -18,7 +18,10 @@ from typing import Any
 from .config import FleetConfig
 from .conn.connection import ConnectionState, DeviceConnection
 from .conn.ws import WebSocketTransport, WsClient
+from .tree.node import UiNode
+from .tree.selector import Selector
 from .tree.tree import UiTree
+from .tree.window import WindowList
 
 
 class Device:
@@ -105,6 +108,100 @@ class Device:
             params["windowId"] = window_id
         result = await self._conn.rpc.call("dumpHierarchy", params)
         return UiTree.from_dict(result)
+
+    async def windows(
+        self,
+        *,
+        include_tree: bool = False,
+        compress: bool = True,
+        max_depth: int | None = None,
+    ) -> WindowList:
+        """Enumerate all interactive windows via ``getWindows``.
+
+        Lists every window (application, IME, system bars, dialogs, overlays,
+        split-screen), topmost first — not just the active one.
+
+        Args:
+            include_tree: Attach each window's UI tree under ``root``.
+            compress: Drop recomputable ``center`` and empty ``children`` in any
+                attached trees.
+            max_depth: Maximum depth for attached trees; ``None`` for unbounded.
+
+        Returns:
+            The parsed :class:`~axonctl.WindowList` (topmost first).
+
+        Raises:
+            RpcTimeout: If the agent does not reply within the deadline.
+            ConnectionLost: If the connection drops during the call.
+        """
+        params: dict[str, Any] = {"includeTree": include_tree, "compress": compress}
+        if max_depth is not None:
+            params["maxDepth"] = max_depth
+        result = await self._conn.rpc.call("getWindows", params)
+        return WindowList.from_dict(result)
+
+    async def find(
+        self,
+        selector: Selector,
+        *,
+        compress: bool = True,
+        max_depth: int | None = None,
+        window_id: int | None = None,
+    ) -> UiNode | None:
+        """Dump the UI and return the first node matching ``selector``.
+
+        A convenience for "dump then search" in one call. For repeated queries on
+        the same screen, prefer :meth:`dump` once and reuse the tree.
+
+        Args:
+            selector: The selector to evaluate.
+            compress: See :meth:`dump`.
+            max_depth: See :meth:`dump`.
+            window_id: See :meth:`dump`.
+
+        Returns:
+            The matching node, or ``None``.
+
+        Raises:
+            AccessibilityDisabled: If there is no active-window root.
+            WindowNotFound: If ``window_id`` has no matching window.
+            RpcTimeout: If the agent does not reply within the deadline.
+            ConnectionLost: If the connection drops during the call.
+        """
+        tree = await self.dump(
+            compress=compress, max_depth=max_depth, window_id=window_id
+        )
+        return tree.find(selector)
+
+    async def find_all(
+        self,
+        selector: Selector,
+        *,
+        compress: bool = True,
+        max_depth: int | None = None,
+        window_id: int | None = None,
+    ) -> list[UiNode]:
+        """Dump the UI and return all nodes matching ``selector``.
+
+        Args:
+            selector: The selector to evaluate.
+            compress: See :meth:`dump`.
+            max_depth: See :meth:`dump`.
+            window_id: See :meth:`dump`.
+
+        Returns:
+            All matching nodes (pre-order).
+
+        Raises:
+            AccessibilityDisabled: If there is no active-window root.
+            WindowNotFound: If ``window_id`` has no matching window.
+            RpcTimeout: If the agent does not reply within the deadline.
+            ConnectionLost: If the connection drops during the call.
+        """
+        tree = await self.dump(
+            compress=compress, max_depth=max_depth, window_id=window_id
+        )
+        return tree.find_all(selector)
 
     async def aclose(self) -> None:
         """Close the underlying connection and release its resources."""
