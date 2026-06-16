@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-06-16
+
 ### Added
 - Interactive UI inspector: `Device.inspect(path)` captures a dump + screenshot
   and writes a single self-contained HTML file (Appium-Inspector-style) — the
