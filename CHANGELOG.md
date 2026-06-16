@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `FleetController` waits for present devices to connect on `start()`/`async with`
+  by default (`wait_ready` / `ready_timeout`, and a public `wait_ready()`), closing
+  the race where an immediate `run()` saw an empty registry.
+- `Device.wait_package()` (honest name: matches the foreground package). The agent
+  exposes no activity name; `wait_activity()` is kept as an alias.
+- Typed exceptions `UnsupportedSelector` and `DeviceNotConnected`.
+- `connect_device(...)` is now usable as `async with connect_device(...)` directly
+  (still awaitable too).
+- ASCII-only guard test for protocol keys/identifiers.
+
+### Changed
+- The event stream is enabled automatically on connect (and re-enabled on
+  reconnect); `wait_toast()` now also returns a toast that fired just before the
+  call (buffered), closing the toast race.
+- `run()` target resolution for a group/tag name, predicate, or serial list now
+  resolves against the **configured** fleet: a configured-but-disconnected member
+  surfaces as a failed `Outcome` (`DeviceNotConnected`) instead of being silently
+  skipped. `targets=None` still means all connected devices. An empty target set
+  logs a warning.
+- Passing a `.within(...)` selector to a node action now raises
+  `UnsupportedSelector` (was a generic `ValueError`) — never a silent
+  wrong-target action.
+
 ## [0.1.0] - 2026-06-16
 
 ### Added

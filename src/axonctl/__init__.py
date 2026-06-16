@@ -34,6 +34,7 @@ from .rpc.errors import (
     AmbiguousMatch,
     AxonError,
     ConnectionLost,
+    DeviceNotConnected,
     GestureFailed,
     InternalError,
     InvalidParams,
@@ -45,6 +46,7 @@ from .rpc.errors import (
     RpcError,
     RpcTimeout,
     Stale,
+    UnsupportedSelector,
     WaitTimeout,
     WindowNotFound,
 )
@@ -91,6 +93,8 @@ __all__ = [
     "RpcTimeout",
     "WaitTimeout",
     "ConnectionLost",
+    "UnsupportedSelector",
+    "DeviceNotConnected",
     # Exceptions — protocol error codes
     "ParseError",
     "InvalidRequest",

@@ -33,6 +33,13 @@ node = await device.wait_for(Selector.id("com.app:id/ok"), timeout=10)
 A transient "no active window" mid-transition (e.g. during an app launch) is
 tolerated: the wait simply keeps waiting rather than failing.
 
+The library enables the agent's event stream **automatically when a device
+connects** (and re-enables it after a reconnect), so events flow from the start —
+you never call `setEventStream` yourself. Because the stream is on early,
+`wait_toast` can also return a toast that fired in the short window *just before*
+the call, closing the race where a form's feedback ("Wrong password") appears
+between an action returning and the wait subscribing.
+
 ## Groups and tags
 
 Tags are **static**, declared in config (`serial -> tags`). They are not read

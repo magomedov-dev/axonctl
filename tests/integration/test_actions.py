@@ -5,7 +5,13 @@ from __future__ import annotations
 import pytest
 from fake_agent import fake_agent, stale_then_ok_handler
 
-from axonctl import FleetConfig, Selector, Stale, connect_device
+from axonctl import (
+    FleetConfig,
+    Selector,
+    Stale,
+    UnsupportedSelector,
+    connect_device,
+)
 from axonctl.config import Retry
 
 _LOGIN = Selector.id("com.app:id/login")
@@ -36,7 +42,7 @@ async def test_node_actions_succeed() -> None:
 async def test_action_rejects_within_selector() -> None:
     async with fake_agent() as uri, await connect_device("d", uri=uri) as device:
         scoped = Selector.text("OK").within(Selector.id("com.app:id/dialog"))
-        with pytest.raises(ValueError, match="within"):
+        with pytest.raises(UnsupportedSelector, match="within"):
             await device.click(scoped)
 
 

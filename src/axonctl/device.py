@@ -13,7 +13,7 @@ the first vertical slice; the public entry point becomes
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Iterable, Mapping
+from collections.abc import Generator, Iterable, Mapping
 from typing import Any, Literal
 
 from .config import FleetConfig
@@ -22,6 +22,7 @@ from .conn.ws import WebSocketTransport, WsClient
 from .fleet.adb import Adb
 from .gestures import GestureBuilder
 from .retry import RetryPolicy
+from .rpc.errors import UnsupportedSelector
 from .tree.node import UiNode
 from .tree.selector import Selector
 from .tree.tree import UiTree
@@ -77,6 +78,7 @@ class Device:
             events=connection.events,
             ensure_stream=connection.ensure_event_stream,
             dump=self.dump,
+            recent_toast=connection.recent_toast,
         )
 
     @property
@@ -184,6 +186,12 @@ class Device:
 
         A convenience for "dump then search" in one call. For repeated queries on
         the same screen, prefer :meth:`dump` once and reuse the tree.
+
+        Note:
+            The returned :class:`~axonctl.UiNode` is a **snapshot** of the dump,
+            not a live handle — its ``node_id`` never travels back to the device.
+            To act on it, use criteria (``click(Selector...)``) or
+            ``tap(node.center)``, not the node object itself.
 
         Args:
             selector: The selector to evaluate.
@@ -341,6 +349,8 @@ class Device:
             window_id: Search a specific window; ``None`` uses the active window.
 
         Raises:
+            UnsupportedSelector: If ``selector`` has a ``.within(...)`` scope
+                (use ``window_id`` or a more specific selector instead).
             NodeNotFound: If nothing matches.
             AmbiguousMatch: If several match and no ``index`` is set.
             ActionNotSupported: If the node cannot be clicked.
@@ -356,8 +366,8 @@ class Device:
         """Long-click the node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
-            WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
+            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("longClick", selector, window_id=window_id)
@@ -368,7 +378,8 @@ class Device:
         """Set the text of the editable node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch, WindowNotFound:
+                See :meth:`click`.
             NotEditable: If the node is not editable.
             Stale: If the node keeps going stale across retries.
             ConnectionLost: If the connection drops during the call.
@@ -381,7 +392,8 @@ class Device:
         """Clear the text of the editable node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch, WindowNotFound:
+                See :meth:`click`.
             NotEditable: If the node is not editable.
             Stale: If the node keeps going stale across retries.
             ConnectionLost: If the connection drops during the call.
@@ -403,8 +415,8 @@ class Device:
             window_id: Search a specific window; ``None`` uses the active window.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
-            WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
+            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
             ConnectionLost: If the connection drops during the call.
         """
         action = "scrollForward" if direction == "forward" else "scrollBackward"
@@ -414,8 +426,8 @@ class Device:
         """Give input focus to the node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
-            WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
+            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("focus", selector, window_id=window_id)
@@ -426,8 +438,8 @@ class Device:
         """Clear input focus from the node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
-            WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
+            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("clearFocus", selector, window_id=window_id)
@@ -436,8 +448,8 @@ class Device:
         """Select the node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
-            WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
+            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action("select", selector, window_id=window_id)
@@ -453,8 +465,8 @@ class Device:
         """Set the text selection range on the node matching ``selector``.
 
         Raises:
-            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
-            WindowNotFound: See :meth:`click`.
+            UnsupportedSelector, NodeNotFound, AmbiguousMatch,
+            ActionNotSupported, Stale, WindowNotFound: See :meth:`click`.
             ConnectionLost: If the connection drops during the call.
         """
         await self._node_action(
@@ -554,9 +566,11 @@ class Device:
         self, selector: Selector, *, window_id: int | None
     ) -> dict[str, Any]:
         if selector.container is not None:
-            raise ValueError(
-                "selectors with .within(...) are not supported for actions; "
-                "use window_id or a more specific selector"
+            raise UnsupportedSelector(
+                "selectors with .within(...) cannot be used for node actions "
+                "(the agent matches by bare criteria and cannot express "
+                "containment); use window_id, a more specific selector, or "
+                "tap(node.center) after find()"
             )
         params: dict[str, Any] = {
             "by": selector.by,
@@ -624,8 +638,14 @@ class Device:
             what=f"wait_gone({selector!r})",
         )
 
-    async def wait_activity(self, package: str, *, timeout: float = 10.0) -> None:
-        """Wait until the foreground package equals ``package``.
+    async def wait_package(self, package: str, *, timeout: float = 10.0) -> None:
+        """Wait until the foreground app package equals ``package``.
+
+        Note:
+            This matches the foreground **package** (e.g. ``"com.android.settings"``).
+            The agent does not expose activity names anywhere, so an
+            ``"com.app/.LoginActivity"`` argument would never match — pass a
+            package name only.
 
         Args:
             package: The package name to wait for.
@@ -639,8 +659,25 @@ class Device:
         await self._waits.wait_until(
             lambda tree: True if tree.package == package else None,
             timeout=timeout,
-            what=f"wait_activity({package!r})",
+            what=f"wait_package({package!r})",
         )
+
+    async def wait_activity(self, package: str, *, timeout: float = 10.0) -> None:
+        """Alias of :meth:`wait_package` (kept for compatibility).
+
+        The agent provides no activity name; this matches the foreground
+        **package**. Prefer :meth:`wait_package`.
+
+        Args:
+            package: The package name to wait for.
+            timeout: Deadline in seconds.
+
+        Raises:
+            WaitTimeout: If the package is not foreground at the deadline.
+            AccessibilityDisabled: If a dump finds no active-window root.
+            ConnectionLost: If the connection drops while waiting.
+        """
+        await self.wait_package(package, timeout=timeout)
 
     async def wait_toast(self, *, timeout: float = 5.0) -> str:
         """Wait for the next toast and return its text.
@@ -679,18 +716,83 @@ class Device:
         await self.aclose()
 
 
-async def connect_device(
+async def _open_device(
+    serial: str,
+    *,
+    uri: str | None,
+    transport: WebSocketTransport | None,
+    tags: Iterable[str],
+    config: FleetConfig | None,
+) -> Device:
+    config = config or FleetConfig()
+    if transport is None:
+        if uri is None:
+            raise ValueError("connect_device requires either uri or transport")
+        transport = WsClient(uri, open_timeout=config.timeouts.connect)
+    connection = DeviceConnection(transport, serial=serial, config=config)
+    await connection.connect()
+    return Device(serial=serial, tags=tags, connection=connection)
+
+
+class _DeviceConnector:
+    """Result of :func:`connect_device` — usable two ways.
+
+    ``device = await connect_device(...)`` connects and returns the device, and
+    ``async with connect_device(...) as device`` connects on enter and closes on
+    exit. Both forms are supported so the helper reads naturally either way.
+    """
+
+    def __init__(
+        self,
+        serial: str,
+        *,
+        uri: str | None,
+        transport: WebSocketTransport | None,
+        tags: Iterable[str],
+        config: FleetConfig | None,
+    ) -> None:
+        self._args = (serial,)
+        self._kwargs = {
+            "uri": uri,
+            "transport": transport,
+            "tags": tags,
+            "config": config,
+        }
+        self._device: Device | None = None
+
+    async def _connect(self) -> Device:
+        self._device = await _open_device(*self._args, **self._kwargs)  # type: ignore[arg-type]
+        return self._device
+
+    def __await__(self) -> Generator[Any, None, Device]:
+        return self._connect().__await__()
+
+    async def __aenter__(self) -> Device:
+        return await self._connect()
+
+    async def __aexit__(self, *exc: object) -> None:
+        if self._device is not None:
+            await self._device.aclose()
+
+
+def connect_device(
     serial: str,
     *,
     uri: str | None = None,
     transport: WebSocketTransport | None = None,
     tags: Iterable[str] = (),
     config: FleetConfig | None = None,
-) -> Device:
-    """Open a connection and return a ready :class:`Device`.
+) -> _DeviceConnector:
+    """Open a connection to one device.
 
-    Provisional helper for the first vertical slice and tests. Provide either a
-    ``uri`` (a real ``WsClient`` is created) or a ``transport`` (e.g. a fake).
+    Provisional helper for experiments and tests; production code should use
+    :class:`~axonctl.FleetController`. Provide either a ``uri`` (a real
+    ``WsClient`` is created) or a ``transport`` (e.g. a fake).
+
+    Use it either way::
+
+        device = await connect_device(serial, uri=...)        # then device.aclose()
+        async with connect_device(serial, uri=...) as device: ...
 
     Args:
         serial: Device serial.
@@ -700,17 +802,13 @@ async def connect_device(
         config: Fleet config; defaults are used when omitted.
 
     Returns:
-        A connected :class:`Device`.
+        An awaitable async-context-manager yielding a connected
+        :class:`Device`.
 
     Raises:
         ValueError: If neither ``uri`` nor ``transport`` is provided.
         ConnectionLost: If the socket cannot be opened.
     """
-    config = config or FleetConfig()
-    if transport is None:
-        if uri is None:
-            raise ValueError("connect_device requires either uri or transport")
-        transport = WsClient(uri, open_timeout=config.timeouts.connect)
-    connection = DeviceConnection(transport, serial=serial, config=config)
-    await connection.connect()
-    return Device(serial=serial, tags=tags, connection=connection)
+    return _DeviceConnector(
+        serial, uri=uri, transport=transport, tags=tags, config=config
+    )

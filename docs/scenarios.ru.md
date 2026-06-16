@@ -35,8 +35,16 @@ Selector.text("Delete").within(Selector.id("com.app:id/dialog"))
 
 `find`/`find_all`/`wait_for` оценивают селекторы на ПК поверх дампа, включая
 `.within(...)`. **Действия** над узлами (`click`, `set_text`, ...) отправляют
-селектор агенту, который `.within(...)` не поддерживает — для «внутри диалога»
-передавай `window_id` (из [`windows`][axonctl.Device.windows]).
+селектор агенту, который `.within(...)` не поддерживает: передача
+`.within(...)`-селектора в действие поднимает
+[`UnsupportedSelector`][axonctl.UnsupportedSelector] (а не молчаливый клик не
+туда). Для «внутри диалога» передавай `window_id` (из
+[`windows`][axonctl.Device.windows]); для «внутри контейнера» — более конкретный
+селектор или `tap(node.center)` после `find`.
+
+Узел, возвращённый `find`/`wait_for`, — это **снимок** дампа, а не живая ручка:
+действуй через критерии (`click(Selector...)`) или `tap(node.center)`, а не через
+сам объект узла.
 
 ## Поиск против ожидания
 

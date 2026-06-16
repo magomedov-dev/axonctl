@@ -49,6 +49,12 @@ it as `FleetController(config=...)`.
 Use the controller as an async context manager — entering starts the watcher and
 brings devices up; exiting tears the whole fleet down cleanly.
 
+By default, `start()` (and `async with`) **waits for the devices present on adb at
+startup to finish connecting** before returning (up to `ready_timeout`), so the
+fleet is usable immediately — no manual "wait for devices" step. Disable with
+`FleetController(..., wait_ready=False)` / `from_config(..., wait_ready=False)`, or
+call `await fleet.wait_ready(timeout=...)` yourself.
+
 ```python
 async with FleetController.from_config("fleet.toml") as fleet:
     print([d.serial for d in fleet.devices()])
@@ -91,6 +97,14 @@ print("failures:", results.failed())
 The target set is **snapshotted** at the start of the run, so it is deterministic
 even as devices come and go. A device that fails or detaches mid-run becomes a
 failed [`Outcome`][axonctl.Outcome] — it never aborts the run.
+
+**Target resolution.** A group/tag name, tag predicate, or explicit serial list
+resolves against the **configured** fleet — so a configured member that is not
+currently connected is *not* silently skipped; it appears as a failed
+[`Outcome`][axonctl.Outcome] carrying [`DeviceNotConnected`][axonctl.DeviceNotConnected].
+`targets=None` runs on all currently-connected devices. ("Run on group *us*" thus
+means all of *us*, with the disconnected ones reported as failures rather than
+quietly omitted.)
 
 ### Concurrency
 
