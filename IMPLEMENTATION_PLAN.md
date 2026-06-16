@@ -338,7 +338,7 @@ reconnect; группы резолвятся через TagIndex.
 | 2 | UI tree / Selector / Windows | ✅ готов |
 | 3 | Events + waits | ✅ готов |
 | 4 | Device facade (gestures/actions/screenshot/retry) | ✅ готов |
-| 5 | Fleet (watcher/ports/adb/groups/controller) | ⬜ не начат |
+| 5 | Fleet (watcher/ports/adb/groups/controller) | ✅ готов |
 | 6 | Executor (run/targets/Results) | ⬜ не начат |
 | 7 | Docs / examples / release 0.1.0 | ⬜ не начат |
 
