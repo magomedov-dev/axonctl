@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-06-16
+
+### Fixed
+- CI lint: combine a nested `async with` in a test that a newer `ruff` flags
+  (SIM117), so `main`/`develop` CI is green again. No library changes.
+
 ## [0.2.0] - 2026-06-16
 
 ### Added

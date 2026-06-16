@@ -77,9 +77,11 @@ async def test_run_on_empty_targets_returns_empty_without_raising() -> None:
 
 
 async def test_connect_device_async_with_form() -> None:
-    async with fake_agent() as uri:
-        async with connect_device("d", uri=uri) as device:  # no `await` needed
-            assert (await device.ping())["pong"] is True
+    async with (
+        fake_agent() as uri,
+        connect_device("d", uri=uri) as device,  # no `await` needed
+    ):
+        assert (await device.ping())["pong"] is True
 
 
 async def test_connect_device_await_form_still_works() -> None:
