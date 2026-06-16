@@ -14,16 +14,33 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Iterable, Mapping
-from typing import Any
+from typing import Any, Literal
 
 from .config import FleetConfig
 from .conn.connection import ConnectionState, DeviceConnection
 from .conn.ws import WebSocketTransport, WsClient
+from .gestures import GestureBuilder
+from .retry import RetryPolicy
 from .tree.node import UiNode
 from .tree.selector import Selector
 from .tree.tree import UiTree
 from .tree.window import WindowList
 from .wait import WaitEngine
+
+#: Scroll direction for :meth:`Device.scroll`.
+ScrollDirection = Literal["forward", "backward"]
+#: Screenshot encoding for :meth:`Device.screenshot`.
+ScreenshotFormat = Literal["jpeg", "png"]
+#: System-level action for :meth:`Device.global_action`.
+GlobalAction = Literal[
+    "back",
+    "home",
+    "recents",
+    "notifications",
+    "quickSettings",
+    "powerDialog",
+    "lockScreen",
+]
 
 
 class Device:
@@ -50,6 +67,7 @@ class Device:
         self._serial = serial
         self._tags = frozenset(tags)
         self._conn = connection
+        self._retry = RetryPolicy(connection.config.retry)
         self._waits = WaitEngine(
             events=connection.events,
             ensure_stream=connection.ensure_event_stream,
@@ -211,6 +229,311 @@ class Device:
             compress=compress, max_depth=max_depth, window_id=window_id
         )
         return tree.find_all(selector)
+
+    # -- Gestures ----------------------------------------------------------
+
+    async def tap(self, x: int, y: int, *, duration: int = 50) -> None:
+        """Tap at screen coordinates ``(x, y)``.
+
+        Args:
+            x: Horizontal coordinate in pixels.
+            y: Vertical coordinate in pixels.
+            duration: Press duration in milliseconds.
+
+        Raises:
+            GestureFailed: If the gesture is cancelled or cannot be dispatched.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._conn.rpc.call(
+            "gesture", GestureBuilder.tap(x, y, duration=duration)
+        )
+
+    async def long_tap(self, x: int, y: int, *, duration: int = 600) -> None:
+        """Long-press at ``(x, y)``.
+
+        Raises:
+            GestureFailed: If the gesture is cancelled or cannot be dispatched.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._conn.rpc.call(
+            "gesture", GestureBuilder.long_tap(x, y, duration=duration)
+        )
+
+    async def double_tap(self, x: int, y: int, *, duration: int = 50) -> None:
+        """Double-tap at ``(x, y)``.
+
+        Raises:
+            GestureFailed: If the gesture is cancelled or cannot be dispatched.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._conn.rpc.call(
+            "gesture", GestureBuilder.double_tap(x, y, duration=duration)
+        )
+
+    async def swipe(
+        self, x1: int, y1: int, x2: int, y2: int, *, duration: int = 300
+    ) -> None:
+        """Swipe (flick) from ``(x1, y1)`` to ``(x2, y2)``.
+
+        Raises:
+            GestureFailed: If the gesture is cancelled or cannot be dispatched.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._conn.rpc.call(
+            "gesture", GestureBuilder.swipe(x1, y1, x2, y2, duration=duration)
+        )
+
+    async def drag(
+        self, x1: int, y1: int, x2: int, y2: int, *, duration: int = 800
+    ) -> None:
+        """Slow drag from ``(x1, y1)`` to ``(x2, y2)``.
+
+        Raises:
+            GestureFailed: If the gesture is cancelled or cannot be dispatched.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._conn.rpc.call(
+            "gesture", GestureBuilder.drag(x1, y1, x2, y2, duration=duration)
+        )
+
+    async def pinch(
+        self,
+        cx: int,
+        cy: int,
+        *,
+        start_radius: int,
+        end_radius: int,
+        duration: int = 300,
+    ) -> None:
+        """Two-finger pinch around ``(cx, cy)``.
+
+        ``start_radius > end_radius`` pinches in (zoom out); the reverse pinches
+        out (zoom in).
+
+        Raises:
+            GestureFailed: If the gesture is cancelled or cannot be dispatched.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._conn.rpc.call(
+            "gesture",
+            GestureBuilder.pinch(
+                cx,
+                cy,
+                start_radius=start_radius,
+                end_radius=end_radius,
+                duration=duration,
+            ),
+        )
+
+    # -- Node actions ------------------------------------------------------
+
+    async def click(self, selector: Selector, *, window_id: int | None = None) -> None:
+        """Click the node matching ``selector``.
+
+        Args:
+            selector: Selector identifying the node (``.within(...)`` is not
+                supported here — use ``window_id`` or a more specific selector).
+            window_id: Search a specific window; ``None`` uses the active window.
+
+        Raises:
+            NodeNotFound: If nothing matches.
+            AmbiguousMatch: If several match and no ``index`` is set.
+            ActionNotSupported: If the node cannot be clicked.
+            Stale: If the node keeps going stale across retries.
+            WindowNotFound: If ``window_id`` has no matching window.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action("click", selector, window_id=window_id)
+
+    async def long_click(
+        self, selector: Selector, *, window_id: int | None = None
+    ) -> None:
+        """Long-click the node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
+            WindowNotFound: See :meth:`click`.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action("longClick", selector, window_id=window_id)
+
+    async def set_text(
+        self, selector: Selector, text: str, *, window_id: int | None = None
+    ) -> None:
+        """Set the text of the editable node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, WindowNotFound: See :meth:`click`.
+            NotEditable: If the node is not editable.
+            Stale: If the node keeps going stale across retries.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action(
+            "setText", selector, window_id=window_id, extra={"text": text}
+        )
+
+    async def clear(self, selector: Selector, *, window_id: int | None = None) -> None:
+        """Clear the text of the editable node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, WindowNotFound: See :meth:`click`.
+            NotEditable: If the node is not editable.
+            Stale: If the node keeps going stale across retries.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action("clear", selector, window_id=window_id)
+
+    async def scroll(
+        self,
+        selector: Selector,
+        direction: ScrollDirection,
+        *,
+        window_id: int | None = None,
+    ) -> None:
+        """Scroll the node matching ``selector`` forward or backward.
+
+        Args:
+            selector: Selector identifying the scrollable node.
+            direction: ``"forward"`` or ``"backward"``.
+            window_id: Search a specific window; ``None`` uses the active window.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
+            WindowNotFound: See :meth:`click`.
+            ConnectionLost: If the connection drops during the call.
+        """
+        action = "scrollForward" if direction == "forward" else "scrollBackward"
+        await self._node_action(action, selector, window_id=window_id)
+
+    async def focus(self, selector: Selector, *, window_id: int | None = None) -> None:
+        """Give input focus to the node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
+            WindowNotFound: See :meth:`click`.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action("focus", selector, window_id=window_id)
+
+    async def clear_focus(
+        self, selector: Selector, *, window_id: int | None = None
+    ) -> None:
+        """Clear input focus from the node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
+            WindowNotFound: See :meth:`click`.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action("clearFocus", selector, window_id=window_id)
+
+    async def select(self, selector: Selector, *, window_id: int | None = None) -> None:
+        """Select the node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
+            WindowNotFound: See :meth:`click`.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action("select", selector, window_id=window_id)
+
+    async def set_selection(
+        self,
+        selector: Selector,
+        start: int,
+        end: int,
+        *,
+        window_id: int | None = None,
+    ) -> None:
+        """Set the text selection range on the node matching ``selector``.
+
+        Raises:
+            NodeNotFound, AmbiguousMatch, ActionNotSupported, Stale,
+            WindowNotFound: See :meth:`click`.
+            ConnectionLost: If the connection drops during the call.
+        """
+        await self._node_action(
+            "setSelection",
+            selector,
+            window_id=window_id,
+            extra={"start": start, "end": end},
+        )
+
+    # -- Other RPCs --------------------------------------------------------
+
+    async def global_action(self, action: GlobalAction) -> bool:
+        """Perform a system-level action (back, home, recents, ...).
+
+        Args:
+            action: The global action to perform.
+
+        Returns:
+            The platform's ``performGlobalAction`` result.
+
+        Raises:
+            InvalidParams: If the action is unknown.
+            ConnectionLost: If the connection drops during the call.
+        """
+        result = await self._conn.rpc.call("globalAction", {"action": action})
+        return bool(result.get("success", False))
+
+    async def screenshot(
+        self, *, format: ScreenshotFormat = "jpeg", quality: int = 80
+    ) -> bytes:
+        """Capture the screen and return the encoded image bytes.
+
+        The agent is system-rate-limited to roughly one capture per second;
+        calling faster fails with :class:`~axonctl.InternalError`. Pace
+        screenshots accordingly.
+
+        Args:
+            format: ``"jpeg"`` (default) or ``"png"``.
+            quality: JPEG quality 0..100 (ignored for PNG).
+
+        Returns:
+            The raw image bytes.
+
+        Raises:
+            InvalidParams: If ``format``/``quality`` are invalid.
+            InternalError: If capture fails (e.g. rate limit exceeded).
+            ConnectionLost: If the connection drops during the call.
+        """
+        params: dict[str, Any] = {"format": format, "quality": quality}
+        _meta, payload = await self._conn.rpc.call_binary("screenshot", params)
+        return payload
+
+    def _node_params(
+        self, selector: Selector, *, window_id: int | None
+    ) -> dict[str, Any]:
+        if selector.container is not None:
+            raise ValueError(
+                "selectors with .within(...) are not supported for actions; "
+                "use window_id or a more specific selector"
+            )
+        params: dict[str, Any] = {
+            "by": selector.by,
+            "value": selector.value,
+            "match": selector.match,
+        }
+        if selector.index is not None:
+            params["index"] = selector.index
+        if window_id is not None:
+            params["windowId"] = window_id
+        return params
+
+    async def _node_action(
+        self,
+        action: str,
+        selector: Selector,
+        *,
+        window_id: int | None,
+        extra: Mapping[str, Any] | None = None,
+    ) -> None:
+        params = self._node_params(selector, window_id=window_id)
+        params["action"] = action
+        if extra:
+            params.update(extra)
+        await self._retry.run(lambda: self._conn.rpc.call("nodeAction", params))
 
     async def wait_for(self, selector: Selector, *, timeout: float = 10.0) -> UiNode:
         """Wait until ``selector`` matches a node, then return it.

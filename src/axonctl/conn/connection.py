@@ -83,6 +83,11 @@ class DeviceConnection:
         return self._serial
 
     @property
+    def config(self) -> FleetConfig:
+        """The fleet configuration in effect for this connection."""
+        return self._config
+
+    @property
     def state(self) -> ConnectionState:
         """Current lifecycle state."""
         return self._state
