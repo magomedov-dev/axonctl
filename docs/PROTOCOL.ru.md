@@ -1,6 +1,5 @@
 # Справочник протокола Axon
 
-[English](PROTOCOL.md) · **Русский**
 
 > **Вендорная копия.** Канонический источник — репозиторий агента Axon:
 > <https://github.com/magomedov-dev/axon> (`docs/PROTOCOL.ru.md`). Этот файл —

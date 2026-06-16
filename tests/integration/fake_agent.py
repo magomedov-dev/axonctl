@@ -141,8 +141,18 @@ async def silent_handler(connection: ServerConnection) -> None:
 
 
 async def closing_handler(connection: ServerConnection) -> None:
-    """Close the connection on the first request (drives ConnectionLost tests)."""
-    async for _raw in connection:
+    """Answer setEventStream, then close on the next request (ConnectionLost tests).
+
+    The controller enables the event stream on connect, so that is the first
+    frame; answering it lets the drop land on the caller's actual request.
+    """
+    async for raw in connection:
+        request: dict[str, Any] = orjson.loads(raw)
+        if request.get("method") == "setEventStream":
+            await connection.send(
+                _ok(request.get("id"), {"success": True, "enabled": True})
+            )
+            continue
         await connection.close()
         return
 
@@ -315,11 +325,15 @@ class FakeAdb:
     """Records adb operations; satisfies the ``Adb`` protocol for fleet tests."""
 
     def __init__(self) -> None:
+        self.present: list[str] = []
         self.forwards: list[tuple[str, int, int]] = []
         self.removed: list[tuple[str, int]] = []
         self.launched: list[tuple[str, str]] = []
         self.stopped: list[tuple[str, str]] = []
         self.installed: list[tuple[str, str]] = []
+
+    async def list_serials(self) -> list[str]:
+        return list(self.present)
 
     async def forward(self, serial: str, local_port: int, remote_port: int) -> None:
         self.forwards.append((serial, local_port, remote_port))

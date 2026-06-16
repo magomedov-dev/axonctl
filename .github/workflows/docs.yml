@@ -1,0 +1,27 @@
+name: docs
+
+# Build and publish the MkDocs site to the gh-pages branch on every push to main
+# (i.e. on each release). Enable GitHub Pages with source "Deploy from a branch →
+# gh-pages" in the repository settings once.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install (with docs extras)
+        run: pip install -e ".[docs]"
+      - name: Deploy to gh-pages
+        run: mkdocs gh-deploy --force

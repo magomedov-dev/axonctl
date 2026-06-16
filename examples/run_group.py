@@ -15,7 +15,7 @@ from axonctl import Device, FleetController, Selector
 async def open_and_read(device: Device) -> str:
     """Open Settings and return the first visible text — a tiny demo scenario."""
     await device.launch("com.android.settings")
-    await device.wait_activity("com.android.settings", timeout=10)
+    await device.wait_package("com.android.settings", timeout=10)
     title = await device.find(Selector.cls("android.widget.TextView"))
     return title.text if title and title.text else "(no title)"
 

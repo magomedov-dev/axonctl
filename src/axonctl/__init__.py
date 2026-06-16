@@ -34,6 +34,7 @@ from .rpc.errors import (
     AmbiguousMatch,
     AxonError,
     ConnectionLost,
+    DeviceNotConnected,
     GestureFailed,
     InternalError,
     InvalidParams,
@@ -45,6 +46,7 @@ from .rpc.errors import (
     RpcError,
     RpcTimeout,
     Stale,
+    UnsupportedSelector,
     WaitTimeout,
     WindowNotFound,
 )
@@ -54,7 +56,7 @@ from .tree.selector import Selector
 from .tree.tree import UiTree
 from .tree.window import Window, WindowList
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     # Fleet
@@ -91,6 +93,8 @@ __all__ = [
     "RpcTimeout",
     "WaitTimeout",
     "ConnectionLost",
+    "UnsupportedSelector",
+    "DeviceNotConnected",
     # Exceptions — protocol error codes
     "ParseError",
     "InvalidRequest",

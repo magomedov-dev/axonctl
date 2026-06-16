@@ -23,6 +23,10 @@ import adbutils
 class Adb(Protocol):
     """Host-side adb operations needed by the fleet and devices."""
 
+    async def list_serials(self) -> list[str]:
+        """Return the serials of devices currently in the ``device`` state."""
+        ...
+
     async def forward(self, serial: str, local_port: int, remote_port: int) -> None:
         """Create a ``tcp:local -> tcp:remote`` forward for ``serial``."""
         ...
@@ -88,6 +92,10 @@ class AdbBridge:
 
     def _device(self, serial: str) -> adbutils.AdbDevice:
         return self._client.device(serial)
+
+    async def list_serials(self) -> list[str]:
+        infos = await asyncio.to_thread(self._client.list)
+        return [info.serial for info in infos if info.state == "device"]
 
     async def forward(self, serial: str, local_port: int, remote_port: int) -> None:
         await asyncio.to_thread(

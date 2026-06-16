@@ -1,6 +1,5 @@
 # Quickstart
 
-**English** · [Русский](quickstart.ru.md)
 
 ## Install
 
@@ -40,7 +39,7 @@ from axonctl import FleetController, Selector
 
 async def open_settings(device):
     await device.launch("com.android.settings")
-    await device.wait_activity("com.android.settings", timeout=10)
+    await device.wait_package("com.android.settings", timeout=10)
     tree = await device.dump()
     return tree.package
 
@@ -63,7 +62,7 @@ import asyncio
 from axonctl import connect_device, Selector
 
 async def main():
-    async with await connect_device("YOUR_SERIAL", uri="ws://127.0.0.1:10001") as device:
+    async with connect_device("YOUR_SERIAL", uri="ws://127.0.0.1:10001") as device:
         print(await device.ping())
         node = await device.find(Selector.text_contains("Settings"))
         print(node)

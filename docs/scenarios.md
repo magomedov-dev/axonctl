@@ -1,6 +1,5 @@
 # Writing scenarios
 
-**English** · [Русский](scenarios.ru.md)
 
 A scenario is just an `async` function that takes a [`Device`][axonctl.Device] and
 returns whatever you want. The library defines the [`Scenario`][axonctl.Scenario]
@@ -34,8 +33,15 @@ Selector.text("Delete").within(Selector.id("com.app:id/dialog"))
 
 `find`/`find_all`/`wait_for` evaluate selectors on the PC over a dump, including
 `.within(...)`. Node **actions** (`click`, `set_text`, ...) send the selector to
-the agent, which does not support `.within(...)` — for "inside a dialog", pass a
-`window_id` (from [`windows`][axonctl.Device.windows]) instead.
+the agent, which does not support `.within(...)`: passing a `.within(...)`
+selector to an action raises [`UnsupportedSelector`][axonctl.UnsupportedSelector]
+(never a silent wrong-target click). For "inside a dialog", pass a `window_id`
+(from [`windows`][axonctl.Device.windows]); for "inside a container", use a more
+specific selector or `tap(node.center)` after a `find`.
+
+A node returned by `find`/`wait_for` is a **snapshot** of the dump, not a live
+handle — act on it via criteria (`click(Selector...)`) or `tap(node.center)`, not
+the node object itself.
 
 ## Finding vs waiting
 
