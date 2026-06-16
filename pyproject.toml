@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "axonctl"
+version = "0.1.0"
+description = "PC-side async controller for the Axon Android device-fleet automation system"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "axonctl authors" }]
+keywords = ["android", "automation", "adb", "accessibility", "asyncio", "fleet"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: AsyncIO",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
+dependencies = [
+    "websockets>=12.0",
+    "orjson>=3.9",
+    "adbutils>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "mypy>=1.8",
+    "ruff>=0.3",
+    "black>=24.0",
+]
+docs = [
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.24",
+]
+
+[project.urls]
+Homepage = "https://github.com/axon/axonctl"
+Documentation = "https://github.com/axon/axonctl"
+Repository = "https://github.com/axon/axonctl"
+
+# --- Packaging (src layout) ---
+[tool.hatch.build.targets.wheel]
+packages = ["src/axonctl"]
+
+# --- Tooling (skeleton; refined in Stage 0) ---
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W", "C4", "SIM"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["axonctl"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
