@@ -11,14 +11,14 @@
       
       
       
-        <link rel="prev" href="../waiting/">
+        <link rel="prev" href="../concepts/">
       
       
-        <link rel="next" href="../screenshots/">
+        <link rel="next" href="../selectors/">
       
       
         
-          <link rel="alternate" href="../../actions/" hreflang="en">
+          <link rel="alternate" href="../../inspector/" hreflang="en">
         
           <link rel="alternate" href="./" hreflang="ru">
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Actions & gestures - axonctl</title>
+        <title>UI inspector - axonctl</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#ui" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Actions & gestures
+              UI inspector
             
           </span>
         </div>
@@ -167,7 +167,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../actions/" hreflang="en" class="md-select__link">
+            <a href="../../inspector/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -540,10 +540,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../inspector/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI inspector
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -559,6 +586,37 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Рендер из уже имеющихся данных
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -652,37 +710,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Actions & gestures
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../actions/" class="md-nav__link">
         
   
   
@@ -698,81 +729,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Содержание">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Содержание
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Действия над узлами
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Жесты (координаты)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Глобальные действия
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stale" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ретраи при STALE
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Действия на стороне adb
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1089,54 +1045,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Действия над узлами
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Жесты (координаты)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Глобальные действия
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stale" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ретраи при STALE
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#adb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Действия на стороне adb
+        Рендер из уже имеющихся данных
       
     </span>
   </a>
@@ -1163,87 +1075,57 @@
   
 
 
-<h1 id="_1">Действия и жесты<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="_2">Действия над узлами<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>Действия над узлами нацеливаются на узел через <a class="autorefs autorefs-internal" title="Selector
-
-
-  
-      dataclass
-  " href="../../api/#axonctl.Selector"><code>Selector</code></a>;
-агент заново находит его от свежего корня и выполняет действие. При <code>STALE</code> они
-автоматически ретраятся (см. ниже).</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;Next&quot;</span><span class="p">))</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">long_click</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/item&quot;</span><span class="p">))</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/search&quot;</span><span class="p">),</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/search&quot;</span><span class="p">))</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">scroll</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="s2">&quot;...RecyclerView&quot;</span><span class="p">),</span> <span class="s2">&quot;forward&quot;</span><span class="p">)</span>   <span class="c1"># or &quot;backward&quot;</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">focus</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/field&quot;</span><span class="p">))</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">clear_focus</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/field&quot;</span><span class="p">))</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/item&quot;</span><span class="p">))</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">set_selection</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/field&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-</code></pre></div>
-<p>Все они принимают <code>window_id=</code>, чтобы действовать внутри конкретного окна (из
-<a class="autorefs autorefs-internal" title="windows
+<h1 id="ui">Инспектор UI<a class="headerlink" href="#ui" title="Permanent link">&para;</a></h1>
+<p>Вид текущего экрана устройства в стиле Appium Inspector — генерируется как один
+самодостаточный HTML-файл, который открывается в любом браузере. Без сервера, без
+внешних ресурсов.</p>
+<p><a class="autorefs autorefs-internal" title="inspect
 
 
   
       async
-  " href="../../api/#axonctl.Device.windows"><code>windows</code></a>). Они поднимают соответствующую типизированную
-ошибку — <code>NodeNotFound</code>, <code>AmbiguousMatch</code>, <code>ActionNotSupported</code>, <code>NotEditable</code>,
-<code>WindowNotFound</code>, <code>Stale</code> или <code>UnsupportedSelector</code> (для селектора с
-<code>.within(...)</code>). См. <a href="../errors/">Обработку ошибок</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Селекторы для действий</p>
-<p>Действия используют <code>by</code>/<code>value</code>/<code>match</code>/<code>index</code> (+ опционально <code>window_id</code>).
-<code>.within(...)</code> — это ограничение области только для запросов, и оно поднимает
-<code>UnsupportedSelector</code>, если передать его в действие — используйте <code>window_id</code>
-или более конкретный селектор.</p>
-</div>
-<h2 id="_3">Жесты (координаты)<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>Жесты принимают сырые экранные координаты (длительности в миллисекундах):</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">tap</span><span class="p">(</span><span class="mi">540</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">double_tap</span><span class="p">(</span><span class="mi">540</span><span class="p">,</span> <span class="mi">1200</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">long_tap</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">swipe</span><span class="p">(</span><span class="mi">540</span><span class="p">,</span> <span class="mi">1600</span><span class="p">,</span> <span class="mi">540</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>            <span class="c1"># flick</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">drag</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>             <span class="c1"># slow drag</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">pinch</span><span class="p">(</span><span class="mi">540</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">start_radius</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">end_radius</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>  <span class="c1"># pinch in (zoom out)</span>
+  " href="../../api/#axonctl.Device.inspect"><code>Device.inspect</code></a> снимает дамп <strong>и</strong> скриншот и пишет
+страницу:</p>
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">&quot;ui.html&quot;</span><span class="p">)</span>            <span class="c1"># PNG (чётко)</span>
+<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">&quot;ui.html&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;jpeg&quot;</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>  <span class="c1"># меньше файл</span>
 </code></pre></div>
-<p>Тап по найденному узлу через его центр:</p>
-<div class="highlight"><pre><span></span><code><span class="n">node</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;Menu&quot;</span><span class="p">))</span>
-<span class="k">if</span> <span class="n">node</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">center</span><span class="p">:</span>
-    <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">tap</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">center</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-</code></pre></div>
-<p>Жесты поднимают <a class="autorefs autorefs-internal" title="GestureFailed" href="../../api/#axonctl.GestureFailed"><code>GestureFailed</code></a>, если жест отменён или
-его невозможно доставить.</p>
-<h2 id="_4">Глобальные действия<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">global_action</span><span class="p">(</span><span class="s2">&quot;home&quot;</span><span class="p">)</span>          <span class="c1"># back | home | recents | notifications</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">global_action</span><span class="p">(</span><span class="s2">&quot;back&quot;</span><span class="p">)</span>          <span class="c1"># quickSettings | powerDialog | lockScreen</span>
-</code></pre></div>
-<p>Возвращает платформенный результат типа <code>bool</code>; поднимает <code>InvalidParams</code> для
-неизвестного действия.</p>
-<h2 id="stale">Ретраи при STALE<a class="headerlink" href="#stale" title="Permanent link">&para;</a></h2>
-<p><code>STALE</code> означает, что агент нашёл узел, но тот изменился до того, как действие
-сработало, — транзиентное состояние. Ретраит контроллер (а не устройство): каждый
-ретрай заново отправляет <code>nodeAction</code>, который заново ищет от свежего корня.
-Настраивается через конфиг <code>[retry]</code> (<code>attempts</code>, <code>delay</code>).</p>
-<p>Для собственных многошаговых хелперов используйте декоратор:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">axonctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">retry_on_stale</span>
+<p>Открой <code>ui.html</code> в браузере. Ты получишь:</p>
+<ul>
+<li><strong>Скриншот</strong> с кликабельными оверлеями элементов. Наведение подсвечивает самый
+  маленький элемент под курсором; клик — выбирает его.</li>
+<li><strong>Навигируемое дерево</strong> (связано с оверлеем в обе стороны): наведение на строку
+  подсвечивает её бокс, клик — выбирает. Поле поиска фильтрует по id / text /
+  class.</li>
+<li><strong>Атрибуты выбранного элемента</strong> (class, resourceId, text, contentDesc,
+  clickable/enabled/focused, bounds).</li>
+<li><strong>Готовые к копированию сниппеты <a class="autorefs autorefs-internal" title="Selector
 
-<span class="nd">@retry_on_stale</span><span class="p">(</span><span class="n">attempts</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">confirm</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
-    <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;Confirm&quot;</span><span class="p">))</span>
+
+  
+      dataclass
+  " href="../../api/#axonctl.Selector"><code>Selector</code></a></strong> для элемента
+  (<code>Selector.id(...)</code>, <code>Selector.text(...)</code>, <code>Selector.desc(...)</code>,
+  <code>Selector.cls(..., index=...)</code>) — копирование в один клик.</li>
+</ul>
+<p>Это самый быстрый способ подобрать нужный селектор для сценария.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Дамп и скриншот — активного окна / всего экрана. Bounds узлов абсолютны
+относительно экрана, поэтому оверлей совпадает со скриншотом. Скриншоты
+ограничены платформой (~1/сек); <code>inspect</code> делает один.</p>
+</div>
+<h2 id="_1">Рендер из уже имеющихся данных<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Рендерер — чистая функция, поэтому можно собрать страницу из дампа и картинки,
+снятых самостоятельно (например, сохранённых из прогона):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">axonctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_inspector_html</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">png</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">build_inspector_html</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">png</span><span class="p">,</span> <span class="n">image_mime</span><span class="o">=</span><span class="s2">&quot;image/png&quot;</span><span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ui.html&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="adb">Действия на стороне adb<a class="headerlink" href="#adb" title="Permanent link">&para;</a></h2>
-<p>Когда устройство получено из <a class="autorefs autorefs-internal" title="FleetController" href="../../api/#axonctl.FleetController"><code>FleetController</code></a>, оно
-привязано к adb и может управлять приложениями:</p>
-<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="s2">&quot;com.example.app&quot;</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="s2">&quot;com.example.app&quot;</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="s2">&quot;/path/to/app.apk&quot;</span><span class="p">)</span>
-</code></pre></div>
-<p>(Для отдельного устройства из <code>connect_device</code> без привязки к adb эти вызовы
-поднимают <code>RuntimeError</code>.)</p>
-<p>См. также: <a href="../waiting/">Ожидания</a> и <a href="../screenshots/">Скриншоты</a>.</p>
+<p>См. также: <a href="../selectors/">Селекторы</a>, <a href="../tree/">Дерево UI</a>,
+<a href="../screenshots/">Скриншоты</a>.</p>
 
 
 

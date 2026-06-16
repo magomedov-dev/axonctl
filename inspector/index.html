@@ -11,16 +11,16 @@
       
       
       
-        <link rel="prev" href="../selectors/">
+        <link rel="prev" href="../concepts/">
       
       
-        <link rel="next" href="../waiting/">
+        <link rel="next" href="../selectors/">
       
       
         
           <link rel="alternate" href="./" hreflang="en">
         
-          <link rel="alternate" href="../ru/tree/" hreflang="ru">
+          <link rel="alternate" href="../ru/inspector/" hreflang="ru">
         
       
       
@@ -29,7 +29,7 @@
     
     
       
-        <title>The UI tree - axonctl</title>
+        <title>UI inspector - axonctl</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#the-ui-tree" class="md-skip">
+        <a href="#ui-inspector" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              The UI tree
+              UI inspector
             
           </span>
         </div>
@@ -171,7 +171,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../ru/tree/" hreflang="ru" class="md-select__link">
+            <a href="../ru/inspector/" hreflang="ru" class="md-select__link">
               Русский
             </a>
           </li>
@@ -538,10 +538,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../inspector/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UI inspector
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -557,6 +584,37 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rendering-from-data-you-already-have" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rendering from data you already have
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -594,37 +652,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    The UI tree
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../tree/" class="md-nav__link">
         
   
   
@@ -640,81 +671,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#dumping" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dumping
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#searching" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Searching
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#nodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Nodes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#navigation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Navigation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#counting-inspecting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Counting / inspecting
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1087,54 +1043,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dumping" class="md-nav__link">
+  <a href="#rendering-from-data-you-already-have" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dumping
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#searching" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Searching
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#nodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Nodes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#navigation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Navigation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#counting-inspecting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Counting / inspecting
+        Rendering from data you already have
       
     </span>
   </a>
@@ -1161,77 +1073,56 @@
   
 
 
-<h1 id="the-ui-tree">The UI tree<a class="headerlink" href="#the-ui-tree" title="Permanent link">&para;</a></h1>
-<p>A dump is a snapshot of one window's accessibility tree. You search and navigate
-it entirely on the PC.</p>
-<h2 id="dumping">Dumping<a class="headerlink" href="#dumping" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="n">tree</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>                       <span class="c1"># active window, compressed</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>         <span class="c1"># include center + empty children</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>            <span class="c1"># bound the depth</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">window_id</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>           <span class="c1"># a specific window</span>
+<h1 id="ui-inspector">UI inspector<a class="headerlink" href="#ui-inspector" title="Permanent link">&para;</a></h1>
+<p>An Appium-Inspector-style view of a device's current screen — generated as a
+single self-contained HTML file you open in any browser. No server, no external
+assets.</p>
+<p><a class="autorefs autorefs-internal" title="inspect
+
+
+  
+      async
+  " href="../api/#axonctl.Device.inspect"><code>Device.inspect</code></a> captures a dump <strong>and</strong> a screenshot
+and writes the page:</p>
+<div class="highlight"><pre><span></span><code><span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">&quot;ui.html&quot;</span><span class="p">)</span>            <span class="c1"># PNG (crisp)</span>
+<span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="s2">&quot;ui.html&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;jpeg&quot;</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>  <span class="c1"># smaller file</span>
 </code></pre></div>
-<p><a class="autorefs autorefs-internal" title="UiTree
+<p>Open <code>ui.html</code> in a browser. You get:</p>
+<ul>
+<li><strong>The screenshot</strong> with clickable element overlays. Hover to highlight the
+  smallest element under the cursor; click to select it.</li>
+<li><strong>A navigable tree</strong> (left↔right linked with the overlay): hover a row to
+  highlight its box, click to select. A search box filters by id / text / class.</li>
+<li><strong>The selected element's attributes</strong> (class, resourceId, text, contentDesc,
+  clickable/enabled/focused, bounds).</li>
+<li><strong>Ready-to-copy <a class="autorefs autorefs-internal" title="Selector
 
 
   
       dataclass
-  " href="../api/#axonctl.UiTree"><code>UiTree</code></a> has <code>root</code>, <code>screen</code> (the generation counter), and
-<code>package</code> (the foreground app).</p>
-<div class="admonition tip">
-<p class="admonition-title">Dump once, query many</p>
-<p><code>Device.find</code>/<code>find_all</code> dump then search in one call — convenient, but each
-call is a fresh dump. For several queries on the same screen, <code>dump()</code> once and
-reuse the tree.</p>
+  " href="../api/#axonctl.Selector"><code>Selector</code></a> snippets</strong> for that element
+  (<code>Selector.id(...)</code>, <code>Selector.text(...)</code>, <code>Selector.desc(...)</code>,
+  <code>Selector.cls(..., index=...)</code>) — one click to copy.</li>
+</ul>
+<p>It is the fastest way to discover the right selector for a scenario.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The dump and screenshot are of the active window / full screen. Node bounds
+are screen-absolute, so the overlay lines up with the screenshot. Screenshots
+are rate-limited (~1/sec) by the platform; <code>inspect</code> takes a single one.</p>
 </div>
-<h2 id="searching">Searching<a class="headerlink" href="#searching" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">axonctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">Selector</span>
+<h2 id="rendering-from-data-you-already-have">Rendering from data you already have<a class="headerlink" href="#rendering-from-data-you-already-have" title="Permanent link">&para;</a></h2>
+<p>The renderer is a pure function, so you can build the page from a dump and image
+you captured yourself (e.g. saved from a run):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">axonctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_inspector_html</span>
 
-<span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/title&quot;</span><span class="p">))</span>        <span class="c1"># UiNode | None</span>
-<span class="n">buttons</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="s2">&quot;android.widget.Button&quot;</span><span class="p">))</span>  <span class="c1"># list[UiNode]</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">png</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">build_inspector_html</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">png</span><span class="p">,</span> <span class="n">image_mime</span><span class="o">=</span><span class="s2">&quot;image/png&quot;</span><span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ui.html&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
 </code></pre></div>
-<p>Or in one call against a fresh dump:</p>
-<div class="highlight"><pre><span></span><code><span class="n">node</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="s2">&quot;Continue&quot;</span><span class="p">))</span>
-<span class="n">nodes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">device</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="s2">&quot;android.widget.EditText&quot;</span><span class="p">))</span>
-</code></pre></div>
-<h2 id="nodes">Nodes<a class="headerlink" href="#nodes" title="Permanent link">&para;</a></h2>
-<p><a class="autorefs autorefs-internal" title="UiNode
-
-
-  
-      dataclass
-  " href="../api/#axonctl.UiNode"><code>UiNode</code></a> mirrors the protocol's node schema (snake_case):
-<code>node_id</code>, <code>parent_id</code>, <code>class_name</code>, <code>text</code>, <code>resource_id</code>, <code>content_desc</code>,
-<code>clickable</code>, <code>enabled</code>, <code>focused</code>, <code>bounds</code>, <code>center</code>, <code>children</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">node</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">resource_id</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">class_name</span>
-<span class="n">node</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">center</span>
-<span class="n">node</span><span class="o">.</span><span class="n">center</span>          <span class="c1"># Point(x, y) — handy for tap(node.center.x, node.center.y)</span>
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">A node is a snapshot, not a handle</p>
-<p><code>node_id</code> is valid only within its dump and never travels back to the device.
-To act on a found node, use criteria (<code>click(Selector...)</code>) or
-<code>tap(node.center)</code> — you cannot "click this node object".</p>
-</div>
-<h2 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h2>
-<p>Downward navigation needs no setup:</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">:</span> <span class="o">...</span>
-<span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">descendants</span><span class="p">():</span> <span class="o">...</span>   <span class="c1"># pre-order</span>
-<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">walk</span><span class="p">():</span> <span class="o">...</span>             <span class="c1"># node + descendants</span>
-</code></pre></div>
-<p>Upward navigation (<code>parent</code>, <code>ancestors</code>) needs parent links, which the tree
-builds <strong>lazily</strong> — only when you search via <code>tree.find</code>/<code>find_all</code> or call
-<code>tree.link()</code> explicitly. A dump you only serialize never pays for linking.</p>
-<div class="highlight"><pre><span></span><code><span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">Selector</span><span class="o">.</span><span class="n">id</span><span class="p">(</span><span class="s2">&quot;com.app:id/user&quot;</span><span class="p">))</span>   <span class="c1"># this links the tree</span>
-<span class="n">node</span><span class="o">.</span><span class="n">parent</span>                                          <span class="c1"># UiNode | None</span>
-<span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ancestors</span><span class="p">())</span>                               <span class="c1"># parent → ... → root</span>
-</code></pre></div>
-<h2 id="counting-inspecting">Counting / inspecting<a class="headerlink" href="#counting-inspecting" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">walk</span><span class="p">())</span>
-<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">walk</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">text</span><span class="p">]</span>
-</code></pre></div>
-<p>The <code>examples/inspect_ui.py</code> script prints a compact tree — handy for discovering
-selectors.</p>
-<p>See also: <a href="../selectors/">Selectors</a> and <a href="../windows/">Windows &amp; dialogs</a>.</p>
+<p>See also: <a href="../selectors/">Selectors</a>, <a href="../tree/">The UI tree</a>,
+<a href="../screenshots/">Screenshots</a>.</p>
 
 
 

@@ -71,6 +71,13 @@
         <xhtml:link rel="alternate" hreflang="ru" href="Noneru/fleet/"/>
     </url>
     <url>
+        <loc>Noneinspector/</loc>
+        <lastmod>2026-06-16</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneinspector/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/inspector/"/>
+    </url>
+    <url>
         <loc>Noneinstallation/</loc>
         <lastmod>2026-06-16</lastmod>
         <changefreq>daily</changefreq>
@@ -202,6 +209,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="ru" href="Noneru/fleet/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonefleet/"/>
+    </url>
+    <url>
+        <loc>Noneru/inspector/</loc>
+        <lastmod>2026-06-16</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/inspector/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneinspector/"/>
     </url>
     <url>
         <loc>Noneru/installation/</loc>
