@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-16
+
 ### Added
 - GitHub Actions: a `ci` workflow (ruff / black / mypy / pytest on push & PR) and
   a `docs` workflow that publishes the MkDocs site to `gh-pages` on each push to

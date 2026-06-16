@@ -9,6 +9,8 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-16
+
 ### Добавлено
 - GitHub Actions: workflow `ci` (ruff / black / mypy / pytest на push и PR) и
   workflow `docs`, публикующий сайт MkDocs в `gh-pages` при каждом push в `main`.
