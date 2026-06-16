@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-16
+
 ### Added
 - Repository scaffolding and tooling baseline:
   - `src`-layout package `axonctl` with a `py.typed` marker (PEP 561) and an
