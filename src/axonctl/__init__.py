@@ -6,7 +6,7 @@ automation code an ergonomic, fully ``async`` API.
 
 This package is a **reusable library**: install it and write your own automation
 scenarios in your own project. A scenario is just an ``async`` function taking a
-:class:`~axonctl.Device`; the library runs it across device groups.
+:class:`Device`; the library runs it across device groups.
 
 The public API is intentionally narrow — only the names re-exported here (and
 listed in :data:`__all__`) are a stable contract. Everything under the internal
@@ -14,14 +14,73 @@ layers (``conn``, ``rpc``, ``events``, parts of ``fleet``) is an implementation
 detail and may change without notice.
 
 Note:
-    The public surface is built up stage by stage; ``__all__`` is empty until the
-    relevant layers land (see ``IMPLEMENTATION_PLAN.md``).
+    The public surface is built up stage by stage. As of Stage 1 it covers the
+    transport/RPC vertical slice: :class:`Device` (``ping``/``dump``), the parsed
+    UI tree types, configuration, and the exception hierarchy.
 """
 
 from __future__ import annotations
 
+from .config import Backoff, FleetConfig, Timeouts
+from .conn.connection import ConnectionState
+from .device import Device, connect_device
+from .rpc.errors import (
+    AccessibilityDisabled,
+    ActionNotSupported,
+    AmbiguousMatch,
+    AxonError,
+    ConnectionLost,
+    GestureFailed,
+    InternalError,
+    InvalidParams,
+    InvalidRequest,
+    MethodNotFound,
+    NodeNotFound,
+    NotEditable,
+    ParseError,
+    RpcError,
+    RpcTimeout,
+    Stale,
+    WindowNotFound,
+)
+from .tree.geom import Bounds, Point
+from .tree.node import UiNode
+from .tree.tree import UiTree
+
 __version__ = "0.1.0"
 
-# The public API is exported here as each stage lands. Keep this list the single
-# source of truth for what `from axonctl import *` and external users may rely on.
-__all__: list[str] = []
+__all__ = [
+    # Core facade
+    "Device",
+    "connect_device",
+    # Configuration
+    "FleetConfig",
+    "Timeouts",
+    "Backoff",
+    # Connection
+    "ConnectionState",
+    # UI tree (parsed; navigation/selectors land in the next stage)
+    "UiTree",
+    "UiNode",
+    "Bounds",
+    "Point",
+    # Exceptions — base + transport
+    "AxonError",
+    "RpcError",
+    "RpcTimeout",
+    "ConnectionLost",
+    # Exceptions — protocol error codes
+    "ParseError",
+    "InvalidRequest",
+    "MethodNotFound",
+    "InvalidParams",
+    "InternalError",
+    "AccessibilityDisabled",
+    "WindowNotFound",
+    "NodeNotFound",
+    "AmbiguousMatch",
+    "ActionNotSupported",
+    "NotEditable",
+    "Stale",
+    "GestureFailed",
+]

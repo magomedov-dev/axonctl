@@ -27,3 +27,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Bilingual documentation: English is canonical (`FILE.md`), Russian is the
     mirror (`FILE.ru.md`).
 - Staged implementation plan (`IMPLEMENTATION_PLAN.md`).
+- **Stage 1 — transport + RPC + minimal `Device`** (first vertical slice):
+  - WebSocket transport (`WsClient`) behind a `WebSocketTransport` seam, frame
+    router, pending-request registry with variant-A binary correlation, request-
+    id generator, reconnect backoff policy, and the per-device connection with
+    read/ping loops and clean cancellation.
+  - `RpcClient` with a per-call timeout; the full typed exception hierarchy
+    (`AxonError`, `RpcError` + protocol subclasses, `RpcTimeout`,
+    `ConnectionLost`) and the wire-code mapping.
+  - Configuration model (`FleetConfig`, `Timeouts`, `Backoff`) loadable from TOML.
+  - Minimal parsed UI tree (`UiTree`, `UiNode`, `Bounds`, `Point`).
+  - `Device` facade with `ping()` and `dump()`, plus the provisional
+    `connect_device` helper; first public `__all__`.
+  - Unit + integration tests (against an in-process fake agent); verified
+    end-to-end against a real device.
