@@ -30,6 +30,14 @@ PC-сторона системы Axon: асинхронный контролле
   `FleetController`, `Device`, `Selector`, `UiTree`/`UiNode`, `Window`/`WindowList`,
   иерархия исключений, value-типы (`Bounds`, `Point`), конфиг. Слои
   `conn/rpc/router/pending/events` — внутренние.
+- **Документация двуязычна (EN канон + RU зеркало).** Вся проза для
+  пользователя — на двух языках: английский канонический (`FILE.md`), русский
+  зеркало (`FILE.ru.md`), со ссылкой-переключателем сверху. Касается README,
+  CONTRIBUTING, CHANGELOG, PROTOCOL и всех guide-страниц сайта. При правке одного
+  языка второй держим в синхронности в **том же коммите**. **Docstrings — только
+  на английском** (это код; из них автогенерируется API Reference). Этот
+  внутренний план (`IMPLEMENTATION_PLAN.md`) — рабочий документ, ведётся на
+  русском и не зеркалится.
 
 ## Git-flow по этапам
 
@@ -302,7 +310,10 @@ reconnect; группы резолвятся через TagIndex.
 - `mkdocs.yml` + `docs/`: Overview, Quickstart, Concepts (stateless,
   событийные ожидания, группы, **модель исполнения сценариев** + таблица
   «блокирующее → async-замена»), Fleet management, Writing scenarios,
-  API Reference (mkdocstrings, авто из docstrings), Protocol (инклуд PROTOCOL.md).
+  API Reference (mkdocstrings, авто из docstrings — на EN), Protocol (инклуд
+  PROTOCOL.md). **Двуязычный сайт** через `mkdocs-static-i18n` (en/ru): каждая
+  guide-страница — в двух языках; API Reference остаётся на EN (источник —
+  docstrings). Переключатель языка в шапке.
 - `examples/` — автономные демо, импортирующие установленный `axonctl` как
   внешний пользователь (НЕ часть пакета): минимальный wait_for→click, прогон по
   группе, обработка `Results`. Сверить примеры с актуальным API.

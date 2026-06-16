@@ -1,5 +1,7 @@
 # Contributing to axonctl
 
+**English** · [Русский](CONTRIBUTING.ru.md)
+
 Thanks for contributing! This guide covers the local setup, how to run the
 checks, and the git workflow.
 

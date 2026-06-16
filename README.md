@@ -1,5 +1,7 @@
 # axonctl
 
+**English** · [Русский](README.ru.md)
+
 > **Status: early development (0.1.0).** Public API is taking shape — see
 > [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md).
 
