@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Interactive UI inspector: `Device.inspect(path)` captures a dump + screenshot
+  and writes a single self-contained HTML file (Appium-Inspector-style) — the
+  screenshot with clickable element overlays, a searchable tree, the selected
+  element's attributes, and ready-to-copy `Selector` snippets. The pure renderer
+  `build_inspector_html(tree, screenshot)` is exported for building the page from
+  data you already have. New guide page and `examples/inspect_screen.py`.
+
 ## [0.2.1] - 2026-06-16
 
 ### Fixed

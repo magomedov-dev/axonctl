@@ -61,6 +61,7 @@ asyncio.run(main())
 
 **Guides**
 
+- [UI inspector](inspector.md) — interactive screen explorer (like Appium).
 - [Selectors](selectors.md) · [The UI tree](tree.md) · [Waiting](waiting.md)
 - [Actions & gestures](actions.md) · [Screenshots](screenshots.md) ·
   [Windows & dialogs](windows.md)

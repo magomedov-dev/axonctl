@@ -62,6 +62,7 @@ asyncio.run(main())
 
 **Гайды**
 
+- [Инспектор UI](inspector.md) — интерактивный обзор экрана (как Appium).
 - [Селекторы](selectors.md) · [Дерево UI](tree.md) · [Ожидания](waiting.md)
 - [Действия и жесты](actions.md) · [Скриншоты](screenshots.md) ·
   [Окна и диалоги](windows.md)

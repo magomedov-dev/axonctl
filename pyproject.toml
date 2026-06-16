@@ -61,6 +61,11 @@ src = ["src", "tests"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "W", "C4", "SIM"]
 
+[tool.ruff.lint.per-file-ignores]
+# inspect.py is mostly an embedded HTML/CSS/JS template; line length there is
+# not meaningful.
+"src/axonctl/inspect.py" = ["E501"]
+
 [tool.black]
 line-length = 88
 target-version = ["py311"]
