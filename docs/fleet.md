@@ -1,6 +1,5 @@
 # Fleet management
 
-**English** · [Русский](fleet.ru.md)
 
 The [`FleetController`][axonctl.FleetController] is the entry point. It watches
 adb for attach/detach, sets up forwards, connects devices, keeps a registry, and

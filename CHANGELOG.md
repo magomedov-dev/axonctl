@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Comprehensive bilingual user guide: a full multi-section manual — Installation,
+  Troubleshooting, Selectors, The UI tree, Waiting, Actions & gestures,
+  Screenshots, Windows & dialogs, Configuration reference, Error handling,
+  Cookbook, and Architecture — alongside the existing Concepts/Fleet/Scenarios
+  pages. The docs site now uses Material's built-in language selector instead of
+  per-page switcher links (which are kept only in the top-level repo files).
 - `FleetController` waits for present devices to connect on `start()`/`async with`
   by default (`wait_ready` / `ready_timeout`, and a public `wait_ready()`), closing
   the race where an immediate `run()` saw an empty registry.

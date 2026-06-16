@@ -46,11 +46,25 @@ plugins:
             show_signature_annotations: true
 
 nav:
-  - Overview: index.md
-  - Quickstart: quickstart.md
+  - Home: index.md
+  - Getting started:
+      - Installation: installation.md
+      - Quickstart: quickstart.md
+      - Troubleshooting: troubleshooting.md
   - Concepts: concepts.md
-  - Fleet management: fleet.md
-  - Writing scenarios: scenarios.md
+  - Guides:
+      - Selectors: selectors.md
+      - The UI tree: tree.md
+      - Waiting: waiting.md
+      - Actions & gestures: actions.md
+      - Screenshots: screenshots.md
+      - Windows & dialogs: windows.md
+      - Fleet management: fleet.md
+      - Writing scenarios: scenarios.md
+      - Configuration: configuration.md
+      - Error handling: errors.md
+      - Cookbook: cookbook.md
+  - Architecture: architecture.md
   - API Reference: api.md
   - Protocol: PROTOCOL.md
 

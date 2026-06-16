@@ -1,6 +1,5 @@
 # Concepts
 
-**English** · [Русский](concepts.ru.md)
 
 ## The device is stateless
 

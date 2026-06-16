@@ -1,6 +1,5 @@
 # Writing scenarios
 
-**English** · [Русский](scenarios.ru.md)
 
 A scenario is just an `async` function that takes a [`Device`][axonctl.Device] and
 returns whatever you want. The library defines the [`Scenario`][axonctl.Scenario]
