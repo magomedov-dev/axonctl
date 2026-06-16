@@ -42,9 +42,10 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/axon/axonctl"
-Documentation = "https://github.com/axon/axonctl"
-Repository = "https://github.com/axon/axonctl"
+Homepage = "https://github.com/magomedov-dev/axonctl"
+Documentation = "https://github.com/magomedov-dev/axonctl"
+Repository = "https://github.com/magomedov-dev/axonctl"
+"Axon agent" = "https://github.com/magomedov-dev/axon"
 
 # --- Packaging (src layout) ---
 [tool.hatch.build.targets.wheel]
