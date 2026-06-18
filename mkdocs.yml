@@ -1,5 +1,6 @@
 site_name: axonctl
 site_description: PC-side async controller for the Axon Android device-fleet system
+site_url: https://magomedov-dev.github.io/axonctl/
 repo_url: https://github.com/magomedov-dev/axonctl
 docs_dir: docs
 
