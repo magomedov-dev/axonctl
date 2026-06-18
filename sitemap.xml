@@ -1,283 +1,283 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>None./</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="None"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/"/>
     </url>
     <url>
-        <loc>NonePROTOCOL/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/PROTOCOL/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="NonePROTOCOL/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/PROTOCOL/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/PROTOCOL/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/PROTOCOL/"/>
     </url>
     <url>
-        <loc>Noneactions/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/actions/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneactions/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/actions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/actions/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/actions/"/>
     </url>
     <url>
-        <loc>Noneapi/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/api/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneapi/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/api/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/api/"/>
     </url>
     <url>
-        <loc>Nonearchitecture/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/architecture/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonearchitecture/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/architecture/"/>
     </url>
     <url>
-        <loc>Noneconcepts/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/concepts/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneconcepts/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/concepts/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/concepts/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/concepts/"/>
     </url>
     <url>
-        <loc>Noneconfiguration/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/configuration/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneconfiguration/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/configuration/"/>
     </url>
     <url>
-        <loc>Nonecookbook/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/cookbook/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecookbook/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/cookbook/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/cookbook/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/cookbook/"/>
     </url>
     <url>
-        <loc>Noneerrors/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/errors/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneerrors/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/errors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/errors/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/errors/"/>
     </url>
     <url>
-        <loc>Nonefleet/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/fleet/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonefleet/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/fleet/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/fleet/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/fleet/"/>
     </url>
     <url>
-        <loc>Noneinspector/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/inspector/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneinspector/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/inspector/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/inspector/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/inspector/"/>
     </url>
     <url>
-        <loc>Noneinstallation/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/installation/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/installation/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/installation/"/>
     </url>
     <url>
-        <loc>Nonequickstart/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/quickstart/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonequickstart/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/quickstart/"/>
     </url>
     <url>
-        <loc>Nonescenarios/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/scenarios/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonescenarios/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/scenarios/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/scenarios/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/scenarios/"/>
     </url>
     <url>
-        <loc>Nonescreenshots/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/screenshots/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonescreenshots/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/screenshots/"/>
     </url>
     <url>
-        <loc>Noneselectors/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/selectors/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneselectors/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/selectors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/selectors/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/selectors/"/>
     </url>
     <url>
-        <loc>Nonetree/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/tree/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonetree/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/tree/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/tree/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/tree/"/>
     </url>
     <url>
-        <loc>Nonetroubleshooting/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/troubleshooting/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonetroubleshooting/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/troubleshooting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/troubleshooting/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/troubleshooting/"/>
     </url>
     <url>
-        <loc>Nonewaiting/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/waiting/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonewaiting/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/waiting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/waiting/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/waiting/"/>
     </url>
     <url>
-        <loc>Nonewindows/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/windows/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonewindows/"/>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/windows/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/windows/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/windows/"/>
     </url>
     <url>
-        <loc>Noneru/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="None"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/"/>
     </url>
     <url>
-        <loc>Noneru/PROTOCOL/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/PROTOCOL/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/PROTOCOL/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="NonePROTOCOL/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/PROTOCOL/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/PROTOCOL/"/>
     </url>
     <url>
-        <loc>Noneru/actions/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/actions/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/actions/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneactions/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/actions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/actions/"/>
     </url>
     <url>
-        <loc>Noneru/api/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/api/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/api/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneapi/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/api/"/>
     </url>
     <url>
-        <loc>Noneru/architecture/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/architecture/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/architecture/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonearchitecture/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/architecture/"/>
     </url>
     <url>
-        <loc>Noneru/concepts/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/concepts/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/concepts/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneconcepts/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/concepts/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/concepts/"/>
     </url>
     <url>
-        <loc>Noneru/configuration/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/configuration/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/configuration/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneconfiguration/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/configuration/"/>
     </url>
     <url>
-        <loc>Noneru/cookbook/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/cookbook/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/cookbook/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecookbook/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/cookbook/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/cookbook/"/>
     </url>
     <url>
-        <loc>Noneru/errors/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/errors/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/errors/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneerrors/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/errors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/errors/"/>
     </url>
     <url>
-        <loc>Noneru/fleet/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/fleet/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/fleet/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonefleet/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/fleet/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/fleet/"/>
     </url>
     <url>
-        <loc>Noneru/inspector/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/inspector/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/inspector/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneinspector/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/inspector/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/inspector/"/>
     </url>
     <url>
-        <loc>Noneru/installation/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/installation/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/installation/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/installation/"/>
     </url>
     <url>
-        <loc>Noneru/quickstart/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/quickstart/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/quickstart/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonequickstart/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/quickstart/"/>
     </url>
     <url>
-        <loc>Noneru/scenarios/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/scenarios/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/scenarios/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonescenarios/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/scenarios/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/scenarios/"/>
     </url>
     <url>
-        <loc>Noneru/screenshots/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/screenshots/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/screenshots/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonescreenshots/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/screenshots/"/>
     </url>
     <url>
-        <loc>Noneru/selectors/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/selectors/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/selectors/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneselectors/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/selectors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/selectors/"/>
     </url>
     <url>
-        <loc>Noneru/tree/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/tree/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/tree/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonetree/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/tree/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/tree/"/>
     </url>
     <url>
-        <loc>Noneru/troubleshooting/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/troubleshooting/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/troubleshooting/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonetroubleshooting/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/troubleshooting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/troubleshooting/"/>
     </url>
     <url>
-        <loc>Noneru/waiting/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/waiting/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/waiting/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonewaiting/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/waiting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/waiting/"/>
     </url>
     <url>
-        <loc>Noneru/windows/</loc>
-        <lastmod>2026-06-16</lastmod>
+        <loc>https://magomedov-dev.github.io/axonctl/ru/windows/</loc>
+        <lastmod>2026-06-18</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="ru" href="Noneru/windows/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonewindows/"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://magomedov-dev.github.io/axonctl/ru/windows/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://magomedov-dev.github.io/axonctl/windows/"/>
     </url>
 </urlset>
